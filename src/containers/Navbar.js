@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 
+import './Navbar.css'
+
 const provider = new firebase.auth.GithubAuthProvider()
 provider.addScope('repo')
 
@@ -11,16 +13,18 @@ const attemptSignIn = () => {
 class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar is-fixed-top" aria-label="main navigation">
-        <div className="navbar-brand">
-          <h1>GitViewer</h1>
-        </div>
-        <div className="navbar-end">
+      <nav className="Navbar" aria-label="main navigation">
+        <div className="logo">GitViewer</div>
+        <div className="end-navbar">
           <div className="navbar-item">
             <p className="control">
-              <a className="button is-dark" onClick={attemptSignIn}>
-                <span>Sign In With Github</span>
-              </a>
+              {this.props.username ? (
+                <span>Hey, {this.props.username}</span>
+              ) : (
+                <a className="button is-dark" onClick={attemptSignIn}>
+                  <span>Sign In With Github</span>
+                </a>
+              )}
             </p>
           </div>
         </div>

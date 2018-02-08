@@ -1,0 +1,8 @@
+.Navbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Navbar .logo {
+  font-size: 2em;
+}
