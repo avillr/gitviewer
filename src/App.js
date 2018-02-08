@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
+import axios from 'axios'
 
 import Routes from './Routes'
 import './App.css'
+import Navbar from './containers/Navbar'
 
 class App extends Component {
   constructor(props) {
@@ -12,15 +14,26 @@ class App extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    firebase
+      .auth()
+      .getRedirectResult()
+      .then(result => {
+        if (result.credential) {
+          console.log(result)
+        }
+      })
+      .catch(console.error)
     firebase.auth().onAuthStateChanged(user => this.setState(user))
   }
 
   render() {
     return (
       <div className="App">
-        <h1 className="App-title">Welcome to Git Viewer</h1>
-        <Routes />
+        <Navbar />
+        <div className="Main-container">
+          <Routes />
+        </div>
       </div>
     )
   }
