@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import './Repo.css'
+import Tree from './Tree'
 
 const getTree = (owner, repo, token, sha) => {
   return axios
@@ -23,7 +24,8 @@ export default class Repo extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contents: []
+      contents: [],
+      tree: {}
     }
   }
 
@@ -36,12 +38,23 @@ export default class Repo extends Component {
         .then(commitTree => {
           console.log('commitTree:', commitTree)
           this.setState({ contents: commitTree.tree })
+          let tree = {}
+          let contents = commitTree.tree
+          let rootNodes = contents.filter(node => node.type === 'tree')
+          let endNodes = contents.filter(node => node.type === 'blob')
+          rootNodes.forEach(rootNode => {
+            tree[rootNode.path] = endNodes.filter(node =>
+              node.path.startsWith(rootNode.path)
+            )
+          })
+          this.setState({ tree: tree })
         })
     }
   }
 
   render() {
     const { owner, repo } = this.props.match.params
+    console.log('tree', this.state.tree)
     return (
       <div className="Repo">
         <h3>
@@ -50,13 +63,8 @@ export default class Repo extends Component {
         <h3>Contents</h3>
         <div className="explorer">
           <div className="root pane">
-            <ul>
-              {this.state.contents.map(item => (
-                <li key={item.sha}>{item.path}</li>
-              ))}
-            </ul>
+            <Tree />
           </div>
-          <div className="first pane">test</div>
         </div>
       </div>
     )
