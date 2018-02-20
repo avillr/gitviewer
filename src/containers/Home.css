@@ -1,0 +1,19 @@
+.Home {
+    height: 100%;
+    background-color: rgb(54, 54, 54);
+}
+
+.Home .container {
+    height: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Home .container .title {
+    color: rgb(245, 245, 245);
+}
+.Home .container .subtitle {
+    color: rgb(245, 245, 245);
+}

@@ -1,6 +1,7 @@
 .Navbar {
   display: flex;
   justify-content: space-between;
+  height: 45px;
 }
 
 .Navbar .logo {
