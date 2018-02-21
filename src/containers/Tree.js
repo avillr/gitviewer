@@ -1,37 +1,15 @@
 import React, { Component } from 'react'
 import { Treebeard } from 'react-treebeard'
 
-const data = {
-  name: 'root',
-  toggled: true,
-  children: [
-    {
-      name: 'parent',
-      children: [{ name: 'child1' }, { name: 'child2' }]
-    },
-    {
-      name: 'loading parent',
-      loading: true,
-      children: []
-    },
-    {
-      name: 'parent',
-      children: [
-        {
-          name: 'nested parent',
-          children: [{ name: 'nested child 1' }, { name: 'nested child 2' }]
-        }
-      ]
-    }
-  ]
-}
-
-class Tree extends React.Component {
+class Tree extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      cursor: {}
+    }
     this.onToggle = this.onToggle.bind(this)
   }
+
   onToggle(node, toggled) {
     if (this.state.cursor) {
       this.state.cursor.active = false
@@ -41,7 +19,9 @@ class Tree extends React.Component {
       node.toggled = toggled
     }
     this.setState({ cursor: node })
+    this.props.handleFileSelect(node)
   }
+
   render() {
     return <Treebeard data={this.props.data} onToggle={this.onToggle} />
   }
