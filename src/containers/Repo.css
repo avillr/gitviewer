@@ -6,7 +6,11 @@
   display: flex;
   background-color: rgb(33, 38, 43);
 }
-.Repo .pane {
+.Repo .explorer {
   min-width: 180px;
-  border-right: 1px solid black;
+  padding: 15px;
+  border-right: 1px solid white;
+}
+.Repo .fileviewer {
+  padding: 15px;
 }

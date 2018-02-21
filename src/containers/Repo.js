@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import SyntaxHighlighter from 'react-syntax-highlighter/prism'
+import { atomDark } from 'react-syntax-highlighter/styles/prism'
 
 import './Repo.css'
 import Tree from './Tree'
@@ -31,12 +33,41 @@ const getFileContents = (owner, repo, token, url) => {
     .catch(console.error)
 }
 
+const getFileLanguage = filename => {
+  const extension = filename.split('.')[1]
+  switch (extension) {
+    case 'js':
+      return 'javascript'
+    case 'jsx':
+      return 'jsx'
+    case 'json':
+      return 'json'
+    case 'go':
+      return 'go'
+    case 'md':
+      return 'markdown'
+    case 'py':
+      return 'python'
+    case 'r':
+      return 'r'
+    case 'rb':
+      return 'ruby'
+    case 'css':
+      return 'css'
+    case 'c':
+      return 'c'
+    default:
+      return 'javascript'
+  }
+}
+
 export default class Repo extends Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: true,
       tree: {},
+      language: 'javascript',
       selectedFileContents: ''
     }
     this.handleFileSelect = this.handleFileSelect.bind(this)
@@ -101,13 +132,21 @@ export default class Repo extends Component {
 
     const { owner, repo } = this.props.match.params
     const token = this.props.user.githubToken
-
-    const fileContents = await getFileContents(owner, repo, token, node.url)
-    this.setState({ selectedFileContents: fileContents })
+    console.log('filenod:', node)
+    let fileContents = await getFileContents(owner, repo, token, node.url)
+    if (typeof fileContents === 'object')
+      fileContents = JSON.stringify(fileContents)
+    const fileLanguage = getFileLanguage(node.name)
+    console.log('filelang', fileLanguage)
+    this.setState({
+      selectedFileContents: fileContents,
+      language: fileLanguage
+    })
   }
 
   render() {
     const { owner, repo } = this.props.match.params
+    const { language } = this.state
     return (
       <div className="Repo">
         {this.state.loading ? (
@@ -123,12 +162,28 @@ export default class Repo extends Component {
         ) : (
           <div className="contents">
             <div className="explorer">
+              <div class="field has-addons">
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Search this repository"
+                  />
+                </div>
+                <div class="control">
+                  <a class="button is-light is-outlined">Search</a>
+                </div>
+              </div>
               <Tree
                 data={this.state.tree}
                 handleFileSelect={this.handleFileSelect}
               />
             </div>
-            <div className="fileviewer">{this.state.selectedFileContents}</div>
+            <div className="fileviewer">
+              <SyntaxHighlighter language={language} style={atomDark}>
+                {this.state.selectedFileContents}
+              </SyntaxHighlighter>
+            </div>
           </div>
         )}
       </div>

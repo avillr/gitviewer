@@ -17,17 +17,16 @@ class Home extends Component {
             Look through Github repos with file trees and full search.
           </h2>
           <form onSubmit={this.handleChange}>
-            <div className="field">
-              <div className="control">
+            <div className="field is-grouped">
+              <div className="control is-expanded">
                 <input
                   className="input"
                   type="text"
                   placeholder="Go on, check it out!"
                 />
               </div>
-            </div>
-            <div className="field">
-              <div className="control" style={{textAlign: 'center'}}>
+
+              <div className="control">
                 <button type="submit" className="button is-light is-outlined">
                   Search
                 </button>
