@@ -1,5 +1,5 @@
 .Repo {
-  height: 100%;
+  height: calc(100vh - 45px);;
 }
 .Repo .contents {
   height: 100%;
@@ -9,6 +9,7 @@
 .Repo .explorer {
   min-width: 180px;
   padding: 15px;
+  overflow: scroll;
   border-right: 1px solid white;
 }
 .Repo .fileviewer {
