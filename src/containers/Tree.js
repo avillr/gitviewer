@@ -43,7 +43,7 @@ class Tree extends React.Component {
     this.setState({ cursor: node })
   }
   render() {
-    return <Treebeard data={data} onToggle={this.onToggle} />
+    return <Treebeard data={this.props.data} onToggle={this.onToggle} />
   }
 }
 
