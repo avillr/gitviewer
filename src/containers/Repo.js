@@ -45,41 +45,41 @@ export default class Repo extends Component {
             toggled: 'true',
             children: []
           }
-          // Remove Nodes
-          let currentTree = tree
-          while (commitTree.tree.length) {
-            let currentNode = commitTree.tree.shift()
-            var splitpath = currentNode.path.replace(/^\/|\/$/g, '').split('/')
-            if (currentNode.type === 'blob') {
-              let node = {
-                ...currentNode,
-                name: splitpath[splitpath.length - 1]
-              }
-              currentTree.children.push(node)
-            } else {
-              let newTree = {
-                name: splitpath[splitpath.length - 1],
-                toggled: 'false',
+          // Place nodes in right spot on tree
+          commitTree.tree.forEach(node => {
+            var splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
+
+            // Initialize new node
+            let newNode = {
+              ...node,
+              name: splitpath[splitpath.length - 1]
+            }
+            if (node.type === 'tree') {
+              newNode = {
+                ...newNode,
+                toggled: false,
                 children: []
               }
-              if (splitpath.length === 1) {
-                tree.children.push(newTree)
-              } else {
-                let workingTree = tree
-                while (splitpath.length > 1) {
-                  let name = splitpath.shift()
-                  let index = workingTree.children.findIndex(el => el.name === name)
-                  workingTree = workingTree.children[index]
-                }
-                workingTree.children.push(newTree)
-              }
-              currentTree = newTree
             }
-          }
-          console.log('final tree', tree)
 
-          // Set State
-           this.setState({ tree: tree, loading: false })
+            // Find right sub folder to push node into
+            if (splitpath.length === 1) {
+              tree.children.push(newNode)
+            } else {
+              let workingTree = tree
+              while (splitpath.length > 1) {
+                let name = splitpath.shift()
+                let index = workingTree.children.findIndex(
+                  el => el.name === name
+                )
+                workingTree = workingTree.children[index]
+              }
+              workingTree.children.push(newNode)
+            }
+          })
+
+          // Set State with final tree
+          this.setState({ tree: tree, loading: false })
         })
     }
   }
@@ -95,8 +95,8 @@ export default class Repo extends Component {
       <div className="Repo">
         <h3>Contents</h3>
         <div className="explorer">
-          <div className="root pane" >
-            <Tree data={this.state.tree}/>
+          <div className="root pane">
+            <Tree data={this.state.tree} />
           </div>
         </div>
       </div>
