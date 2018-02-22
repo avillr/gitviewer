@@ -5,6 +5,7 @@ import 'firebase/firestore'
 import Routes from './Routes'
 import './App.css'
 import Navbar from './containers/Navbar'
+import Footer from './containers/Footer'
 
 class App extends Component {
   constructor(props) {
@@ -66,6 +67,7 @@ class App extends Component {
         <div className="Main-container">
           <Routes childProps={childProps} />
         </div>
+        <Footer />
       </div>
     )
   }

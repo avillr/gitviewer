@@ -1,5 +1,5 @@
 .Repo {
-  height: calc(100vh - 45px);
+  height: calc(100vh - 70px);
 }
 .Repo .contents {
   height: 100%;
@@ -7,11 +7,18 @@
   background-color: rgb(33, 38, 43);
 }
 .Repo .explorer {
-  min-width: 180px;
+  width: 320px;
   padding: 15px;
   overflow: scroll;
   border-right: 1px solid white;
 }
 .Repo .fileviewer {
   padding: 15px;
+  width: 100%;
+  overflow: scroll;
+}
+.Repo .markdown-body {
+  padding: 3em;
+  height: 100%;
+  background-color: white;
 }

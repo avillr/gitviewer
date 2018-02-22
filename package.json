@@ -6,6 +6,8 @@
     "axios": "^0.17.1",
     "bulma": "^0.6.2",
     "firebase": "^4.9.1",
+    "github-markdown-css": "^2.10.0",
+    "marked": "^0.3.16",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",

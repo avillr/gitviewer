@@ -1,19 +1,19 @@
 .Home {
-     height: calc(100vh - 45px);;
-    background-color: rgb(54, 54, 54);
+  height: calc(100vh - 75px);
+  background-color: rgb(54, 54, 54);
 }
 
 .Home .container {
-    height: 100%;
-    max-width: 550px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  height: 100%;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .Home .container .title {
-    color: rgb(245, 245, 245);
+  color: rgb(245, 245, 245);
 }
 .Home .container .subtitle {
-    color: rgb(245, 245, 245);
+  color: rgb(245, 245, 245);
 }

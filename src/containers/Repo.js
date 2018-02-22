@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import SyntaxHighlighter from 'react-syntax-highlighter/prism'
-import { atomDark } from 'react-syntax-highlighter/styles/prism'
 
 import './Repo.css'
 import Tree from './Tree'
+import RenderedContent from '../components/RenderedContent'
 
 const getTree = (owner, repo, token, sha) => {
   return axios
@@ -76,11 +75,7 @@ export default class Repo extends Component {
   componentWillReceiveProps(nextProps) {
     const token = nextProps.user.githubToken
     const { owner, repo } = this.props.match.params
-    if (
-      token &&
-      (owner !== nextProps.match.params.owner ||
-        repo !== nextProps.match.params.repo)
-    ) {
+    if (token) {
       // TODO remove this for prod
       getLatestCommit(owner, repo, token)
         .then(commit => getTree(owner, repo, token, commit.sha))
@@ -136,12 +131,10 @@ export default class Repo extends Component {
 
     const { owner, repo } = this.props.match.params
     const token = this.props.user.githubToken
-    console.log('filenod:', node)
     let fileContents = await getFileContents(owner, repo, token, node.url)
     if (typeof fileContents === 'object')
       fileContents = JSON.stringify(fileContents)
     const fileLanguage = getFileLanguage(node.name)
-    console.log('filelang', fileLanguage)
     this.setState({
       selectedFileContents: fileContents,
       language: fileLanguage
@@ -166,16 +159,16 @@ export default class Repo extends Component {
         ) : (
           <div className="contents">
             <div className="explorer">
-              <div class="field has-addons">
-                <div class="control">
+              <div className="field has-addons">
+                <div className="control">
                   <input
-                    class="input"
+                    className="input"
                     type="text"
-                    placeholder="Search this repository"
+                    placeholder="Search this repo"
                   />
                 </div>
-                <div class="control">
-                  <a class="button is-light is-outlined">Search</a>
+                <div className="control">
+                  <a className="button is-light is-outlined">Search</a>
                 </div>
               </div>
               <Tree
@@ -184,9 +177,7 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
-              <SyntaxHighlighter language={language} style={atomDark}>
-                {this.state.selectedFileContents}
-              </SyntaxHighlighter>
+              <RenderedContent language={language} contents={this.state.selectedFileContents}/>
             </div>
           </div>
         )}
