@@ -75,9 +75,13 @@ export default class Repo extends Component {
 
   componentWillReceiveProps(nextProps) {
     const token = nextProps.user.githubToken
-    if (token) {
+    const { owner, repo } = this.props.match.params
+    if (
+      token &&
+      (owner !== nextProps.match.params.owner ||
+        repo !== nextProps.match.params.repo)
+    ) {
       // TODO remove this for prod
-      const { owner, repo } = this.props.match.params
       getLatestCommit(owner, repo, token)
         .then(commit => getTree(owner, repo, token, commit.sha))
         .then(commitTree => {

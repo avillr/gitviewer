@@ -1,5 +1,5 @@
 .Home {
-    height: 100%;
+     height: calc(100vh - 45px);;
     background-color: rgb(54, 54, 54);
 }
 
