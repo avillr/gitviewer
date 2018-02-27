@@ -154,7 +154,7 @@ export default class Repo extends Component {
     return (
       <div className="Repo">
         {this.state.loading ? (
-          <section className="hero is-large is-dark">
+          <section style={{height: '100%'}}className="hero is-large is-dark">
             <div className="hero-body">
               <div className="container">
                 <h1 className="title">
@@ -184,10 +184,10 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
-              <RenderedContent
+              {this.state.selectedFileContents && <RenderedContent
                 language={language}
                 contents={this.state.selectedFileContents}
-              />
+              />}
             </div>
           </div>
         )}
