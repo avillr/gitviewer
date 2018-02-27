@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import firebase from 'firebase'
 
 import './Navbar.css'
+import logo from '../assets/gitviewer.png'
 
 const provider = new firebase.auth.GithubAuthProvider()
 provider.addScope('repo')
@@ -17,7 +18,7 @@ class Navbar extends Component {
       <nav className="navbar" aria-label="main navigation">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            GitViewer
+            <img alt='GitViewer' src={logo} style={{marginRight: '5px'}}/>GitViewer
           </Link>
         </div>
         <div className="navbar-end">

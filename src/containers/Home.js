@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import './Home.css'
+import logo from '../assets/gitviewerWhite.svg'
 
 class Home extends Component {
   constructor(props) {
@@ -17,28 +18,35 @@ class Home extends Component {
     return (
       <div className="Home">
         <div className="container">
-          <h1 className="title">Welcome to GitViewer</h1>
-          <h2 className="subtitle">
-            Look through Github repos with file trees and full search.
-          </h2>
-          <form onSubmit={this.handleChange}>
-            <div className="field is-grouped">
-              <div className="control is-expanded">
-                <input
-                  className="input"
-                  name="search"
-                  type="text"
-                  placeholder="Go on, check it out!"
-                />
-              </div>
-
-              <div className="control">
-                <button type="submit" className="button is-light is-outlined">
-                  Search
-                </button>
-              </div>
+          <div style={{ display: 'flex', width:'700px' }}>
+            <img alt='logo' src={logo} />
+            <div style={{marginLeft:'20px'}}>
+              <h1 className="title">Welcome to GitViewer</h1>
+              <h2 className="subtitle">
+                Look through Github repos with file trees and full search.
+              </h2>
+              <form onSubmit={this.handleChange}>
+                <div className="field is-grouped">
+                  <div className="control is-expanded">
+                    <input
+                      className="input"
+                      name="search"
+                      type="text"
+                      placeholder="Go on, check it out!"
+                    />
+                  </div>
+                  <div className="control">
+                    <button
+                      type="submit"
+                      className="button is-light is-outlined"
+                    >
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     )
