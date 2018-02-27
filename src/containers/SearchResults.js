@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 import './SearchResults.css'
 
@@ -7,14 +8,23 @@ class SearchResults extends Component {
   constructor(props) {
     super(props)
     this.state = { incomplete_results: false, items: [], total_count: 0 }
+    this.handleChange = this.handleChange.bind(this)
+    this.searchGithub = this.searchGithub.bind(this)
   }
 
   componentDidMount() {
-    let url = `https://api.github.com/search/repositories${
-      this.props.location.search
-    }`
-    if (this.props.user.githubToken)
-      url += `&access_token=${this.props.user.githubToken}`
+    this.searchGithub(this.props.location.search, this.props.user.githubToken)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.search !== this.props.location.search) {
+      this.searchGithub(nextProps.location.search, nextProps.user.githubToken)
+    }
+  }
+
+  searchGithub(searchString, token) {
+    let url = `https://api.github.com/search/repositories${searchString}`
+    if (token) url += `&access_token=${token}`
     axios
       .get(url)
       .then(res => res.data)
@@ -24,13 +34,63 @@ class SearchResults extends Component {
       .catch(console.error)
   }
 
+  handleChange(evt) {
+    evt.preventDefault()
+    this.props.history.push('/search?q=' + evt.target.search.value)
+  }
+
   render() {
+    console.log('data', this.state.items)
     return (
-      <div className="SearchResults">
-        <div>hi</div>
-        <ul>
-          {this.state.items.map(item => <li key={item.id}>{item.name}</li>)}
-        </ul>
+      <div className="SearchResults container">
+        <div className="panel">
+          <p className="panel-heading">
+            Showing {this.state.items.length} of {this.state.total_count}{' '}
+            results
+          </p>
+          <div className="panel-block">
+            <form onSubmit={this.handleChange}>
+              <div className="field has-addons is-expanded">
+                <p className="control has-icons-left ">
+                  <input
+                    className="input is-small"
+                    name="search"
+                    type="text"
+                    placeholder="search"
+                  />
+                  <span className="icon is-small is-left">
+                    <i className="fa fa-search" />
+                  </span>
+                </p>
+                <div className="control">
+                  <button type="submit" className="button is-light is-outlined">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {this.state.items.map(item => (
+            <Link
+              to={`/${item.owner.login}/${item.name}`}
+              className="panel-block"
+              style={{ alignItems: 'baseline' }}
+              key={item.id}
+            >
+              <span className="panel-icon">
+                <i className="fa fa-code-fork" />
+              </span>
+              <span style={{ fontSize: '1.25em' }}>{item.name}</span> -{' '}
+              {item.owner.login}
+              <span style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                {item.stargazers_count}
+                <span className="icon has-text-warning">
+                  <i className="fa fa-star" />
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     )
   }

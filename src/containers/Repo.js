@@ -76,63 +76,59 @@ export default class Repo extends Component {
       loading: true,
       tree: {},
       language: 'javascript',
+      selectedFilePath: '',
       selectedFileContents: ''
     }
     this.handleFileSelect = this.handleFileSelect.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const token = nextProps.user.githubToken
+  componentDidMount() {
+    const token = this.props.user.githubToken
     const { owner, repo } = this.props.match.params
-    if (token) {
-      // TODO remove this for prod
-      getLatestCommit(owner, repo, token)
-        .then(commit => getTree(owner, repo, token, commit.sha))
-        .then(commitTree => {
-          // Initialize tree structure for repo
-          let tree = {
-            name: repo,
-            toggled: 'true',
-            children: []
+    getLatestCommit(owner, repo, token)
+      .then(commit => getTree(owner, repo, token, commit.sha))
+      .then(commitTree => {
+        // Initialize tree structure for repo
+        let tree = {
+          name: repo,
+          toggled: 'true',
+          children: []
+        }
+        // Place nodes in right spot on tree
+        commitTree.tree.forEach(node => {
+          var splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
+          // Initialize new node
+          let newNode = {
+            ...node,
+            name: splitpath[splitpath.length - 1]
           }
-          // Place nodes in right spot on tree
-          commitTree.tree.forEach(node => {
-            var splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
-            // Initialize new node
-            let newNode = {
-              ...node,
-              name: splitpath[splitpath.length - 1]
+          if (node.type === 'tree') {
+            newNode = {
+              ...newNode,
+              toggled: false,
+              children: []
             }
-            if (node.type === 'tree') {
-              newNode = {
-                ...newNode,
-                toggled: false,
-                children: []
-              }
+          }
+          // Find right sub folder to push node into
+          if (splitpath.length === 1) {
+            node.type === 'tree'
+              ? tree.children.unshift(newNode)
+              : tree.children.push(newNode)
+          } else {
+            let workingTree = tree
+            while (splitpath.length > 1) {
+              let name = splitpath.shift()
+              let index = workingTree.children.findIndex(el => el.name === name)
+              workingTree = workingTree.children[index]
             }
-            // Find right sub folder to push node into
-            if (splitpath.length === 1) {
-              node.type === 'tree'
-                ? tree.children.unshift(newNode)
-                : tree.children.push(newNode)
-            } else {
-              let workingTree = tree
-              while (splitpath.length > 1) {
-                let name = splitpath.shift()
-                let index = workingTree.children.findIndex(
-                  el => el.name === name
-                )
-                workingTree = workingTree.children[index]
-              }
-              node.type === 'tree'
-                ? workingTree.children.unshift(newNode)
-                : workingTree.children.push(newNode)
-            }
-          })
-          // Set State with final tree
-          this.setState({ tree: tree, loading: false })
+            node.type === 'tree'
+              ? workingTree.children.unshift(newNode)
+              : workingTree.children.push(newNode)
+          }
         })
-    }
+        // Set State with final tree
+        this.setState({ tree: tree, loading: false })
+      })
   }
 
   async handleFileSelect(node) {
@@ -143,8 +139,10 @@ export default class Repo extends Component {
     const fileLanguage = getFileLanguage(node.name)
     let fileContents = await getFileContents(owner, repo, token, node.url)
     if (fileLanguage !== 'image') fileContents = atob(fileContents)
+    console.log(node)
     this.setState({
       selectedFileContents: fileContents,
+      selectedFilePath: node.path,
       language: fileLanguage
     })
   }
@@ -185,6 +183,11 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
+              <h2 style={{color: 'white'}}>
+                {this.state.selectedFileContents
+                  ? this.state.selectedFilePath
+                  : this.state.tree.name}
+              </h2>
               {this.state.selectedFileContents && (
                 <RenderedContent
                   language={language}
