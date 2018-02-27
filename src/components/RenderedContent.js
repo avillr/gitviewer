@@ -11,6 +11,14 @@ export default ({ contents, language }) => {
         dangerouslySetInnerHTML={{ __html: marked(contents) }}
       />
     )
+  } else if (language === 'image') {
+    console.log('contents', contents)
+    contents = 'data:image/jpeg;base64,' + contents
+    return (
+      <div>
+        <img alt="repo file" src={contents} />
+      </div>
+    )
   } else {
     return (
       <SyntaxHighlighter language={language} style={tomorrow}>

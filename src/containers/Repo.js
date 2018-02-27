@@ -25,10 +25,8 @@ const getLatestCommit = (owner, repo, token, path) => {
 
 const getFileContents = (owner, repo, token, url) => {
   return axios
-    .get(`${url}?access_token=${token}`, {
-      headers: { accept: 'application/vnd.github.VERSION.raw' }
-    })
-    .then(res => res.data)
+    .get(`${url}?access_token=${token}`)
+    .then(res => res.data.content)
     .catch(console.error)
 }
 
@@ -55,6 +53,16 @@ const getFileLanguage = filename => {
       return 'css'
     case 'c':
       return 'c'
+    case 'jpeg':
+      return 'image'
+    case 'jpg':
+      return 'image'
+    case 'png':
+      return 'image'
+    case 'ico':
+      return 'image'
+    case 'svg':
+      return 'svg'
     default:
       return 'javascript'
   }
@@ -131,10 +139,9 @@ export default class Repo extends Component {
 
     const { owner, repo } = this.props.match.params
     const token = this.props.user.githubToken
-    let fileContents = await getFileContents(owner, repo, token, node.url)
-    if (typeof fileContents === 'object')
-      fileContents = JSON.stringify(fileContents)
     const fileLanguage = getFileLanguage(node.name)
+    let fileContents = await getFileContents(owner, repo, token, node.url)
+    if (fileLanguage !== 'image') fileContents = atob(fileContents)
     this.setState({
       selectedFileContents: fileContents,
       language: fileLanguage
@@ -177,7 +184,10 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
-              <RenderedContent language={language} contents={this.state.selectedFileContents}/>
+              <RenderedContent
+                language={language}
+                contents={this.state.selectedFileContents}
+              />
             </div>
           </div>
         )}
