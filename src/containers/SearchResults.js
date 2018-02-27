@@ -10,12 +10,13 @@ class SearchResults extends Component {
   }
 
   componentDidMount() {
+    let url = `https://api.github.com/search/repositories${
+      this.props.location.search
+    }`
+    if (this.props.user.githubToken)
+      url += `&access_token=${this.props.user.githubToken}`
     axios
-      .get(
-        `https://api.github.com/search/repositories${
-          this.props.location.search
-        }&access_token=${this.props.user.githubToken}`
-      )
+      .get(url)
       .then(res => res.data)
       .then(results => {
         this.setState(results)

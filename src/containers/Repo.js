@@ -6,26 +6,27 @@ import Tree from './Tree'
 import RenderedContent from '../components/RenderedContent'
 
 const getTree = (owner, repo, token, sha) => {
+  let url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1`
+  if (token) url += `&access_token=${token}`
   return axios
-    .get(
-      `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1&access_token=${token}`
-    )
+    .get(url)
     .then(res => res.data)
     .catch(console.error)
 }
 
 const getLatestCommit = (owner, repo, token, path) => {
+  let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
+  if (token) url += `?access_token=${token}`
   return axios
-    .get(
-      `https://api.github.com/repos/${owner}/${repo}/commits/master?access_token=${token}`
-    )
+    .get(url)
     .then(res => res.data)
     .catch(console.error)
 }
 
 const getFileContents = (owner, repo, token, url) => {
+  if (token) url += `?access_token=${token}`
   return axios
-    .get(`${url}?access_token=${token}`)
+    .get(url)
     .then(res => res.data.content)
     .catch(console.error)
 }
@@ -154,7 +155,7 @@ export default class Repo extends Component {
     return (
       <div className="Repo">
         {this.state.loading ? (
-          <section style={{height: '100%'}}className="hero is-large is-dark">
+          <section style={{ height: '100%' }} className="hero is-large is-dark">
             <div className="hero-body">
               <div className="container">
                 <h1 className="title">
@@ -184,10 +185,12 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
-              {this.state.selectedFileContents && <RenderedContent
-                language={language}
-                contents={this.state.selectedFileContents}
-              />}
+              {this.state.selectedFileContents && (
+                <RenderedContent
+                  language={language}
+                  contents={this.state.selectedFileContents}
+                />
+              )}
             </div>
           </div>
         )}
