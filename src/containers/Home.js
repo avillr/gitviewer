@@ -3,9 +3,14 @@ import React, { Component } from 'react'
 import './Home.css'
 
 class Home extends Component {
+  constructor(props) {
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
   handleChange(evt) {
     evt.preventDefault()
-    alert('ayo')
+    this.props.history.push('/search?q=' + evt.target.search.value)
   }
 
   render() {
@@ -21,6 +26,7 @@ class Home extends Component {
               <div className="control is-expanded">
                 <input
                   className="input"
+                  name="search"
                   type="text"
                   placeholder="Go on, check it out!"
                 />
