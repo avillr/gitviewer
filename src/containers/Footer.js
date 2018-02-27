@@ -6,7 +6,7 @@ class Footer extends Component {
   render() {
     return (
       <footer >
-        <strong>GitViewer</strong> by <a href="https://avill.io">Alex Villarreal</a>.
+        <strong>GitViewer</strong> by <a style={{color: 'white'}}href="https://avill.io">Alex Villarreal</a>.
       </footer>
     )
   }

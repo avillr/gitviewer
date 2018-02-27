@@ -1,6 +1,6 @@
 import React from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter/prism'
-import { atomDark } from 'react-syntax-highlighter/styles/prism'
+import { tomorrow } from 'react-syntax-highlighter/styles/prism'
 import marked from 'marked'
 
 export default ({ contents, language }) => {
@@ -13,7 +13,7 @@ export default ({ contents, language }) => {
     )
   } else {
     return (
-      <SyntaxHighlighter language={language} style={atomDark}>
+      <SyntaxHighlighter language={language} style={tomorrow}>
         {contents}
       </SyntaxHighlighter>
     )

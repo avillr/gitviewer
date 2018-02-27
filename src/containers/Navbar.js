@@ -27,16 +27,24 @@ class Navbar extends Component {
                 Hey, {this.props.username}
               </Link>
               <div className="navbar-dropdown is-boxed">
-                <Link className="navbar-item" to="/acccount">
+                <Link className="navbar-item" to="/">
                   Account
                 </Link>
-                <Link className="navbar-item" to="/preferences">
+                <Link className="navbar-item" to="/">
                   Preferences
                 </Link>
                 <hr className="navbar-divider" />
-                <Link className="navbar-item" to="/logout">
+                <a
+                  className="navbar-item"
+                  onClick={() =>
+                    firebase
+                      .auth()
+                      .signOut()
+                      .catch(console.error)
+                  }
+                >
                   Logout
-                </Link>
+                </a>
               </div>
             </div>
           ) : (

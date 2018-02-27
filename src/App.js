@@ -16,25 +16,27 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // firebase
-    //   .auth()
-    //   .getRedirectResult()
-    //   .then(result => {
-    //     console.log(result)
-    //     firebase
-    //       .firestore()
-    //       .collection('users')
-    //       .doc(result.user.uid)
-    //       .set({
-    //         uid: result.user.uid,
-    //         email: result.user.email,
-    //         githubToken: result.credential.accessToken,
-    //         githubUsername: result.additionalUserInfo.username
-    //       })
-    //   })
-    //   .catch(err => {
-    //     console.error('Sign in error:', err)
-    //   })
+    firebase
+      .auth()
+      .getRedirectResult()
+      .then(result => {
+        if (result.user) {
+          console.log('Successful Redirect', result)
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(result.user.uid)
+            .set({
+              uid: result.user.uid,
+              email: result.user.email,
+              githubToken: result.credential.accessToken,
+              githubUsername: result.additionalUserInfo.username
+            })
+        }
+      })
+      .catch(err => {
+        console.error('Sign in error:', err)
+      })
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
