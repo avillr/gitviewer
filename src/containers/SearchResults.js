@@ -49,11 +49,10 @@ class SearchResults extends Component {
             results
           </p>
           <div className="panel-block">
-            <form onSubmit={this.handleChange}>
-              <div className="field has-addons is-expanded">
-                <p className="control has-icons-left ">
+            <form style={{ display: 'flex', width: '100%' }} onSubmit={this.handleChange}>
+                <span style={{width: '100%'}} className="control has-icons-left">
                   <input
-                    className="input is-small"
+                    className="input"
                     name="search"
                     type="text"
                     placeholder="search"
@@ -61,13 +60,12 @@ class SearchResults extends Component {
                   <span className="icon is-small is-left">
                     <i className="fa fa-search" />
                   </span>
-                </p>
-                <div className="control">
-                  <button type="submit" className="button is-light is-outlined">
+                </span>
+                <span className="control">
+                  <button type="submit" className="button is-light">
                     Search
                   </button>
-                </div>
-              </div>
+                </span>
             </form>
           </div>
           {this.state.items.map(item => (
