@@ -1,5 +1,5 @@
 .Repo {
-  height: calc(100vh - 70px);
+  height: calc(100vh - 82px);
 }
 .Repo .contents {
   height: 100%;
@@ -14,7 +14,7 @@
 }
 .Repo .fileviewer {
   padding: 15px;
-  width: 100%;
+  width: 800px;
   overflow: scroll;
 }
 .Repo .markdown-body {
