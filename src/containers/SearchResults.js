@@ -3,11 +3,17 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import './SearchResults.css'
+import Loader from '../components/Loader'
 
 class SearchResults extends Component {
   constructor(props) {
     super(props)
-    this.state = { incomplete_results: false, items: [], total_count: 0 }
+    this.state = {
+      loading: true,
+      incomplete_results: false,
+      items: [],
+      total_count: 0
+    }
     this.handleChange = this.handleChange.bind(this)
     this.searchGithub = this.searchGithub.bind(this)
   }
@@ -29,7 +35,7 @@ class SearchResults extends Component {
       .get(url)
       .then(res => res.data)
       .then(results => {
-        this.setState(results)
+        this.setState({ ...results, loading: false })
       })
       .catch(console.error)
   }
@@ -37,20 +43,37 @@ class SearchResults extends Component {
   handleChange(evt) {
     evt.preventDefault()
     this.props.history.push('/search?q=' + evt.target.search.value)
+    this.setState({ loading: true })
   }
 
   render() {
-    console.log('data', this.state.items)
     return (
       <div className="SearchResults container">
-        <div className="panel">
-          <p className="panel-heading">
-            Showing {this.state.items.length} of {this.state.total_count}{' '}
-            results
-          </p>
-          <div className="panel-block">
-            <form style={{ display: 'flex', width: '100%' }} onSubmit={this.handleChange}>
-                <span style={{width: '100%'}} className="control has-icons-left">
+        {this.state.loading ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: 'calc(100vh - 76px)'
+            }}
+          >
+            <Loader style={{color: 'grey'}}/>
+          </div>
+        ) : (
+          <div className="panel">
+            <p className="panel-heading">
+              Showing {this.state.items.length} of {this.state.total_count}{' '}
+              results
+            </p>
+            <div className="panel-block">
+              <form
+                style={{ display: 'flex', width: '100%' }}
+                onSubmit={this.handleChange}
+              >
+                <span
+                  style={{ width: '100%' }}
+                  className="control has-icons-left"
+                >
                   <input
                     className="input"
                     name="search"
@@ -66,29 +89,30 @@ class SearchResults extends Component {
                     Search
                   </button>
                 </span>
-            </form>
-          </div>
-          {this.state.items.map(item => (
-            <Link
-              to={`/${item.owner.login}/${item.name}`}
-              className="panel-block"
-              style={{ alignItems: 'baseline' }}
-              key={item.id}
-            >
-              <span className="panel-icon">
-                <i className="fa fa-code-fork" />
-              </span>
-              <span style={{ fontSize: '1.25em' }}>{item.name}</span> -{' '}
-              {item.owner.login}
-              <span style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                {item.stargazers_count}
-                <span className="icon has-text-warning">
-                  <i className="fa fa-star" />
+              </form>
+            </div>
+            {this.state.items.map(item => (
+              <Link
+                to={`/${item.owner.login}/${item.name}`}
+                className="panel-block"
+                style={{ alignItems: 'baseline' }}
+                key={item.id}
+              >
+                <span className="panel-icon">
+                  <i className="fa fa-code-fork" />
                 </span>
-              </span>
-            </Link>
-          ))}
-        </div>
+                <span style={{ fontSize: '1.25em' }}>{item.name}</span> -{' '}
+                {item.owner.login}
+                <span style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  {item.stargazers_count}
+                  <span className="icon has-text-warning">
+                    <i className="fa fa-star" />
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     )
   }

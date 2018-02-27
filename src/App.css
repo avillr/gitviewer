@@ -1,4 +1,4 @@
 .Main-container {
-  max-height: calc(100vh - 82px);
+  max-height: calc(100vh - 76px);
   overflow: scroll;
 }

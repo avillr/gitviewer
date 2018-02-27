@@ -4,6 +4,7 @@ import axios from 'axios'
 import './Repo.css'
 import Tree from './Tree'
 import RenderedContent from '../components/RenderedContent'
+import Loader from '../components/Loader'
 
 const getTree = (owner, repo, token, sha) => {
   let url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1`
@@ -139,7 +140,6 @@ export default class Repo extends Component {
     const fileLanguage = getFileLanguage(node.name)
     let fileContents = await getFileContents(owner, repo, token, node.url)
     if (fileLanguage !== 'image') fileContents = atob(fileContents)
-    console.log(node)
     this.setState({
       selectedFileContents: fileContents,
       selectedFilePath: node.path,
@@ -159,6 +159,7 @@ export default class Repo extends Component {
                 <h1 className="title">
                   Loading {owner}'s {repo}...
                 </h1>
+                <Loader />
               </div>
             </div>
           </section>
@@ -183,7 +184,7 @@ export default class Repo extends Component {
               />
             </div>
             <div className="fileviewer">
-              <h2 style={{color: 'white'}}>
+              <h2 style={{ color: 'white' }}>
                 {this.state.selectedFileContents
                   ? this.state.selectedFilePath
                   : this.state.tree.name}
