@@ -18,9 +18,12 @@ class Home extends Component {
     return (
       <div className="Home">
         <div className="container">
-          <div style={{ display: 'flex', width:'700px' }}>
-            <img alt='logo' src={logo} />
-            <div style={{marginLeft:'20px'}}>
+          <div style={{ display: 'flex', width: '700px' }}>
+            <img
+              alt="This is Github's Octocat with binoculars, get it?"
+              src={logo}
+            />
+            <div style={{ marginLeft: '20px' }}>
               <h1 className="title">Welcome to GitViewer</h1>
               <h2 className="subtitle">
                 Look through Github repos with file trees and full search.
