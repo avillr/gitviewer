@@ -19,10 +19,12 @@ class Home extends Component {
       <div className="Home">
         <div className="container">
           <div style={{ display: 'flex', width: '700px' }}>
-            <img
-              alt="This is Github's Octocat with binoculars, get it?"
-              src={logo}
-            />
+            <div style={{height: '150px', width: '150px'}}>
+              <img
+                alt="This is Github's Octocat with binoculars, get it?"
+                src={logo}
+              />
+            </div>
             <div style={{ marginLeft: '20px' }}>
               <h1 className="title">Welcome to GitViewer</h1>
               <h2 className="subtitle">

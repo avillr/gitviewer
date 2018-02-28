@@ -28,13 +28,6 @@ class Navbar extends Component {
                 Hey, {this.props.username}
               </Link>
               <div className="navbar-dropdown is-boxed">
-                <Link className="navbar-item" to="/">
-                  Account
-                </Link>
-                <Link className="navbar-item" to="/">
-                  Preferences
-                </Link>
-                <hr className="navbar-divider" />
                 <a
                   className="navbar-item"
                   onClick={() =>
