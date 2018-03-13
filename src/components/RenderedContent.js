@@ -31,37 +31,45 @@ export default class RenderedContent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentStyle: {name: 'tomorrow', style: tomorrow},
+      currentStyle: { name: 'tomorrow', style: tomorrow },
       styles: [
-        {name: 'coy', style: coy},
-        {name: 'dark', style: dark},
-        {name: 'funky', style: funky},
-        {name: 'okaidia', style: okaidia},
-        {name: 'solarizedlight', style: solarizedlight},
-        {name: 'tomorrow', style: tomorrow},
-        {name: 'twilight', style: twilight},
-        {name: 'prism', style: prism},
-        {name: 'atomDark', style: atomDark},
-        {name: 'base16AteliersulphurpoolLight', style: base16AteliersulphurpoolLight},
-        {name: 'cb', style: cb},
-        {name: 'darcula', style: darcula},
-        {name: 'duotoneDark', style: duotoneDark},
-        {name: 'duotoneEarth', style: duotoneEarth},
-        {name: 'duotoneForest', style: duotoneForest},
-        {name: 'duotoneLight', style: duotoneLight},
-        {name: 'duotoneSea', style: duotoneSea},
-        {name: 'duotoneSpace', style: duotoneSpace},
-        {name: 'ghcolors', style: ghcolors},
-        {name: 'hopscotch', style: hopscotch},
-        {name: 'pojoaque', style: pojoaque},
-        {name: 'vs', style: vs},
-        {name: 'xonokai', style: xonokai}
+        { name: 'coy', style: coy },
+        { name: 'dark', style: dark },
+        { name: 'funky', style: funky },
+        { name: 'okaidia', style: okaidia },
+        { name: 'solarizedlight', style: solarizedlight },
+        { name: 'tomorrow', style: tomorrow },
+        { name: 'twilight', style: twilight },
+        { name: 'prism', style: prism },
+        { name: 'atomDark', style: atomDark },
+        {
+          name: 'base16AteliersulphurpoolLight',
+          style: base16AteliersulphurpoolLight
+        },
+        { name: 'cb', style: cb },
+        { name: 'darcula', style: darcula },
+        { name: 'duotoneDark', style: duotoneDark },
+        { name: 'duotoneEarth', style: duotoneEarth },
+        { name: 'duotoneForest', style: duotoneForest },
+        { name: 'duotoneLight', style: duotoneLight },
+        { name: 'duotoneSea', style: duotoneSea },
+        { name: 'duotoneSpace', style: duotoneSpace },
+        { name: 'ghcolors', style: ghcolors },
+        { name: 'hopscotch', style: hopscotch },
+        { name: 'pojoaque', style: pojoaque },
+        { name: 'vs', style: vs },
+        { name: 'xonokai', style: xonokai }
       ]
     }
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange = (evt) => {
-    this.setState({currentStyle: this.state.styles.find(style => style.name === evt.target.value) })
+  handleChange (evt) {
+    this.setState({
+      currentStyle: this.state.styles.find(
+        style => style.name === evt.target.value
+      )
+    })
   }
 
   render () {
@@ -84,11 +92,29 @@ export default class RenderedContent extends Component {
     } else {
       return (
         <div>
-          <span>Theme: </span>
-          <select value={this.state.currentStyle.name} onChange={this.handleChange}>
-            {this.state.styles.map(style => <option key={style.name} value={style.name}>{style.name}</option>)}
-          </select>
-          <SyntaxHighlighter language={language} style={this.state.currentStyle.style}>
+          <div className='field is-horizontal'>
+            <div className='field-label'>
+              <label className='label' style={{color: 'grey'}}>Theme:</label>
+            </div>
+            <div className='control'>
+              <select
+                className='select'
+                value={this.state.currentStyle.name}
+                onChange={this.handleChange}
+              >
+                {this.state.styles.map(style => (
+                  <option key={style.name} value={style.name}>
+                    {style.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <SyntaxHighlighter
+            language={language}
+            style={this.state.currentStyle.style}
+          >
             {contents}
           </SyntaxHighlighter>
         </div>

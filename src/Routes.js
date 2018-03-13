@@ -10,10 +10,10 @@ import SearchResults from './containers/SearchResults'
 
 const Routes = ({ childProps }) => (
   <Switch>
-    <Route exact path="/" component={Home} />
-    <Route path="/help" component={Help}/>
-    <AppliedRoute path="/search" component={SearchResults} props={childProps}/>
-    <AppliedRoute path="/:owner/:repo" component={Repo} props={childProps} />
+    <Route exact path='/' component={Home} />
+    <Route path='/help' component={Help} />
+    <AppliedRoute path='/search' component={SearchResults} props={childProps} />
+    <AppliedRoute path='/:owner/:repo' component={Repo} props={childProps} />
   </Switch>
 )
 

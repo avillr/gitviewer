@@ -5,73 +5,10 @@ import './Repo.css'
 import Tree from './Tree'
 import RenderedContent from '../components/RenderedContent'
 import Loader from '../components/Loader'
-
-const getTree = (owner, repo, token, sha) => {
-  let url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1`
-  if (token) url += `&access_token=${token}`
-  return axios
-    .get(url)
-    .then(res => res.data)
-    .catch(console.error)
-}
-
-const getLatestCommit = (owner, repo, token, path) => {
-  let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
-  if (token) url += `?access_token=${token}`
-  return axios
-    .get(url)
-    .then(res => res.data)
-    .catch(console.error)
-}
-
-const getFileContents = (owner, repo, token, url) => {
-  if (token) url += `?access_token=${token}`
-  return axios
-    .get(url)
-    .then(res => res.data.content)
-    .catch(console.error)
-}
-
-const getFileLanguage = filename => {
-  const extension = filename.split('.')[1]
-  switch (extension) {
-    case 'js':
-      return 'javascript'
-    case 'jsx':
-      return 'jsx'
-    case 'json':
-      return 'json'
-    case 'go':
-      return 'go'
-    case 'md':
-      return 'markdown'
-    case 'py':
-      return 'python'
-    case 'r':
-      return 'r'
-    case 'rb':
-      return 'ruby'
-    case 'css':
-      return 'css'
-    case 'c':
-      return 'c'
-    case 'jpeg':
-      return 'image'
-    case 'jpg':
-      return 'image'
-    case 'png':
-      return 'image'
-    case 'ico':
-      return 'image'
-    case 'svg':
-      return 'svg'
-    default:
-      return 'javascript'
-  }
-}
+import { getFileLanguage } from '../utils/filename'
 
 export default class Repo extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       loading: true,
@@ -80,18 +17,69 @@ export default class Repo extends Component {
       selectedFilePath: '',
       selectedFileContents: ''
     }
+    this.getTree = this.getTree.bind(this)
+    this.getLatestCommit = this.getLatestCommit.bind(this)
+    this.getFileContents = this.getFileContents.bind(this)
     this.handleFileSelect = this.handleFileSelect.bind(this)
   }
 
-  componentDidMount() {
-    const token = this.props.user.githubToken
-    const { owner, repo } = this.props.match.params
-    getLatestCommit(owner, repo, token)
-      .then(commit => getTree(owner, repo, token, commit.sha))
+  async handleFileSelect (node) {
+    if (node.type !== 'blob') return
+    const fileLanguage = getFileLanguage(node.name)
+    let fileContents = await this.getFileContents(node.url)
+    if (fileLanguage !== 'image') fileContents = window.atob(fileContents)
+    this.setState({
+      selectedFileContents: fileContents,
+      selectedFilePath: node.path,
+      language: fileLanguage
+    })
+  }
+
+  getTree (sha) {
+    const {
+      user: { githubToken },
+      match: { params: { owner, repo } }
+    } = this.props
+    let url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1`
+    if (githubToken) url += `&access_token=${githubToken}`
+    return axios
+      .get(url)
+      .then(res => res.data)
+      .catch(console.error)
+  }
+
+  getFileContents (url) {
+    const {
+      user: { githubToken }
+    } = this.props
+
+    if (githubToken) url += `?access_token=${githubToken}`
+    return axios
+      .get(url)
+      .then(res => res.data.content)
+      .catch(console.error)
+  }
+
+  getLatestCommit () {
+    const {
+      user: { githubToken },
+      match: { params: { owner, repo } }
+    } = this.props
+    let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
+    if (githubToken) url += `?access_token=${githubToken}`
+    return axios
+      .get(url)
+      .then(res => res.data)
+      .catch(console.error)
+  }
+
+  componentDidMount () {
+    this.getLatestCommit()
+      .then(commit => this.getTree(commit.sha))
       .then(commitTree => {
         // Initialize tree structure for repo
         let tree = {
-          name: repo,
+          name: this.props.match.params.repo,
           toggled: 'true',
           children: []
         }
@@ -119,7 +107,9 @@ export default class Repo extends Component {
             let workingTree = tree
             while (splitpath.length > 1) {
               let name = splitpath.shift()
-              let index = workingTree.children.findIndex(el => el.name === name)
+              let index = workingTree.children.findIndex(
+                el => el.name === name
+              )
               workingTree = workingTree.children[index]
             }
             node.type === 'tree'
@@ -132,31 +122,16 @@ export default class Repo extends Component {
       })
   }
 
-  async handleFileSelect(node) {
-    if (node.type !== 'blob') return
-
-    const { owner, repo } = this.props.match.params
-    const token = this.props.user.githubToken
-    const fileLanguage = getFileLanguage(node.name)
-    let fileContents = await getFileContents(owner, repo, token, node.url)
-    if (fileLanguage !== 'image') fileContents = atob(fileContents)
-    this.setState({
-      selectedFileContents: fileContents,
-      selectedFilePath: node.path,
-      language: fileLanguage
-    })
-  }
-
-  render() {
-    const { owner, repo } = this.props.match.params
+  render () {
+    const { user, match: { params: { owner, repo } } } = this.props
     const { language } = this.state
     return (
-      <div className="Repo">
+      <div className='Repo'>
         {this.state.loading ? (
-          <section style={{ height: '100%' }} className="hero is-large is-dark">
-            <div className="hero-body">
-              <div className="container">
-                <h1 className="title">
+          <section style={{ height: '100%' }} className='hero is-large is-dark'>
+            <div className='hero-body'>
+              <div className='container'>
+                <h1 className='title'>
                   Loading {owner}'s {repo}...
                 </h1>
                 <Loader />
@@ -164,26 +139,39 @@ export default class Repo extends Component {
             </div>
           </section>
         ) : (
-          <div className="contents">
-            <div className="explorer">
-              <div className="field has-addons">
-                <div className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="Search this repo"
-                  />
+          <div className='contents'>
+            <div className='explorer'>
+              {user.githubToken ? (
+                <div className='field has-addons'>
+                  <div className='control'>
+                    <input
+                      className='input'
+                      type='text'
+                      placeholder='Search this repo'
+                    />
+                  </div>
+                  <div className='control'>
+                    <a className='button is-light is-outlined'>Search</a>
+                  </div>
                 </div>
-                <div className="control">
-                  <a className="button is-light is-outlined">Search</a>
+              ) : (
+                <div className='field'>
+                  <div className='control'>
+                    <input
+                      disabled
+                      className='input'
+                      type='text'
+                      placeholder='Sign In to unlock full text search'
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
               <Tree
                 data={this.state.tree}
                 handleFileSelect={this.handleFileSelect}
               />
             </div>
-            <div className="fileviewer">
+            <div className='fileviewer'>
               <h2 style={{ color: 'white' }}>
                 {this.state.selectedFileContents
                   ? this.state.selectedFilePath
