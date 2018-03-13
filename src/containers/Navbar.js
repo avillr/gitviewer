@@ -28,6 +28,8 @@ class Navbar extends Component {
                 Hey, {this.props.username}
               </Link>
               <div className="navbar-dropdown is-boxed">
+                <Link className="navbar-item" to="/help">Help</Link>
+                <hr class="navbar-divider" />
                 <a
                   className="navbar-item"
                   onClick={() =>

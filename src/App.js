@@ -8,14 +8,14 @@ import Navbar from './containers/Navbar'
 import Footer from './containers/Footer'
 
 class App extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       user: {}
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     firebase
       .auth()
       .getRedirectResult()
@@ -59,7 +59,7 @@ class App extends Component {
     })
   }
 
-  render() {
+  render () {
     const childProps = {
       user: this.state.user
     }
