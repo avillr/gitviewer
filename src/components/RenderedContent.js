@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import marked from 'marked'
 import SyntaxHighlighter from 'react-syntax-highlighter/prism'
 import {
   coy,
@@ -25,7 +26,6 @@ import {
   vs,
   xonokai
 } from 'react-syntax-highlighter/styles/prism'
-import marked from 'marked'
 
 export default class RenderedContent extends Component {
   constructor (props) {
