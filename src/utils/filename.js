@@ -19,6 +19,8 @@ const getFileLanguage = filename => {
       return 'ruby'
     case 'css':
       return 'css'
+    case 'h':
+      return 'c'
     case 'c':
       return 'c'
     case 'jpeg':

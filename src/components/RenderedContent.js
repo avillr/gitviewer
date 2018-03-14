@@ -31,6 +31,7 @@ export default class RenderedContent extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      lineNumbers: true,
       currentStyle: { name: 'tomorrow', style: tomorrow },
       styles: [
         { name: 'coy', style: coy },
@@ -62,6 +63,7 @@ export default class RenderedContent extends Component {
       ]
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleLineChange = this.handleLineChange.bind(this)
   }
 
   handleChange (evt) {
@@ -72,17 +74,21 @@ export default class RenderedContent extends Component {
     })
   }
 
+  handleLineChange (evt) {
+    this.setState({lineNumbers: !this.state.lineNumbers})
+  }
+
   render () {
     let { contents, language } = this.props
     if (language === 'markdown') {
       return (
         <div
+          style={{ marginTop: '2em' }}
           className='markdown-body'
           dangerouslySetInnerHTML={{ __html: marked(contents) }}
         />
       )
     } else if (language === 'image') {
-      console.log('contents', contents)
       contents = 'data:image/jpeg;base64,' + contents
       return (
         <div>
@@ -94,7 +100,9 @@ export default class RenderedContent extends Component {
         <div>
           <div className='field is-horizontal'>
             <div className='field-label'>
-              <label className='label' style={{color: 'grey'}}>Theme:</label>
+              <label className='label' style={{ color: 'grey' }}>
+                Theme:
+              </label>
             </div>
             <div className='control'>
               <select
@@ -109,11 +117,26 @@ export default class RenderedContent extends Component {
                 ))}
               </select>
             </div>
+            <div className='field-label'>
+              <label className='label' style={{ color: 'grey' }}>
+                Line Numbers:
+              </label>
+            </div>
+            <div className='control'>
+              <label className='checkbox'>
+                <input name='lineNumbers' type='checkbox' checked={this.state.lineNumbers} onChange={this.handleLineChange} />
+              </label>
+            </div>
           </div>
-
           <SyntaxHighlighter
             language={language}
+            showLineNumbers={this.state.lineNumbers}
             style={this.state.currentStyle.style}
+            customStyle={{
+              margin: '0',
+              borderRadius: '0.5em',
+              border: '1px solid whitesmoke'
+            }}
           >
             {contents}
           </SyntaxHighlighter>

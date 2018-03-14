@@ -14,25 +14,28 @@ export default class Repo extends Component {
       loading: true,
       tree: {},
       language: 'javascript',
+      searchResults: [],
       selectedFilePath: '',
       selectedFileContents: ''
     }
     this.getTree = this.getTree.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.getLatestCommit = this.getLatestCommit.bind(this)
     this.getFileContents = this.getFileContents.bind(this)
     this.handleFileSelect = this.handleFileSelect.bind(this)
   }
 
-  async handleFileSelect (node) {
-    if (node.type !== 'blob') return
-    const fileLanguage = getFileLanguage(node.name)
-    let fileContents = await this.getFileContents(node.url)
-    if (fileLanguage !== 'image') fileContents = window.atob(fileContents)
-    this.setState({
-      selectedFileContents: fileContents,
-      selectedFilePath: node.path,
-      language: fileLanguage
-    })
+  getLatestCommit () {
+    const {
+      user: { githubToken },
+      match: { params: { owner, repo } }
+    } = this.props
+    let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
+    if (githubToken) url += `?access_token=${githubToken}`
+    return axios
+      .get(url)
+      .then(res => res.data)
+      .catch(console.error)
   }
 
   getTree (sha) {
@@ -49,9 +52,7 @@ export default class Repo extends Component {
   }
 
   getFileContents (url) {
-    const {
-      user: { githubToken }
-    } = this.props
+    const { user: { githubToken } } = this.props
 
     if (githubToken) url += `?access_token=${githubToken}`
     return axios
@@ -60,17 +61,40 @@ export default class Repo extends Component {
       .catch(console.error)
   }
 
-  getLatestCommit () {
+  async handleFileSelect (node) {
+    if (node.type !== 'blob') return
+    const fileLanguage = getFileLanguage(node.name)
+    let fileContents = await this.getFileContents(node.url)
+    if (fileLanguage !== 'image') fileContents = window.atob(fileContents)
+    this.setState({
+      selectedFileContents: fileContents,
+      selectedFilePath: node.path,
+      language: fileLanguage
+    })
+  }
+
+  handleSubmit (evt) {
+    evt.preventDefault()
     const {
       user: { githubToken },
       match: { params: { owner, repo } }
     } = this.props
-    let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
-    if (githubToken) url += `?access_token=${githubToken}`
-    return axios
-      .get(url)
+
+    console.log(evt.target.input.value)
+    const config = {
+      headers: { Accept: 'application/vnd.github.v3.text-match+json' }
+    }
+    let url = `https://api.github.com/search/code?q=${
+      evt.target.input.value
+    }+repo:${owner}/${repo}`
+    if (githubToken) url += `&access_token=${githubToken}`
+    axios
+      .get(url, config)
       .then(res => res.data)
-      .catch(console.error)
+      .then(results => {
+        console.log('Search Results:', results)
+        this.setState({ searchResults: results })
+      })
   }
 
   componentDidMount () {
@@ -141,40 +165,44 @@ export default class Repo extends Component {
         ) : (
           <div className='contents'>
             <div className='explorer'>
-              {user.githubToken ? (
-                <div className='field has-addons'>
-                  <div className='control'>
-                    <input
-                      className='input'
-                      type='text'
-                      placeholder='Search this repo'
-                    />
+              <form onSubmit={this.handleSubmit}>
+                {user.githubToken ? (
+                  <div className='field has-addons'>
+                    <div className='control'>
+                      <input
+                        className='input'
+                        name='input'
+                        type='text'
+                        placeholder='Search this repo'
+                      />
+                    </div>
+                    <div className='control'>
+                      <a className='button is-light is-outlined'>Search</a>
+                    </div>
                   </div>
-                  <div className='control'>
-                    <a className='button is-light is-outlined'>Search</a>
+                ) : (
+                  <div className='field'>
+                    <div className='control'>
+                      <input
+                        disabled
+                        className='input'
+                        type='text'
+                        placeholder='Sign In to unlock full text search'
+                      />
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className='field'>
-                  <div className='control'>
-                    <input
-                      disabled
-                      className='input'
-                      type='text'
-                      placeholder='Sign In to unlock full text search'
-                    />
-                  </div>
-                </div>
-              )}
+                )}
+              </form>
+              <hr style={{ margin: '1rem 0' }} />
               <Tree
                 data={this.state.tree}
                 handleFileSelect={this.handleFileSelect}
               />
             </div>
             <div className='fileviewer'>
-              <h2 style={{ color: 'white' }}>
+              <h2 style={{ color: 'gray' }}>
                 {this.state.selectedFileContents
-                  ? this.state.selectedFilePath
+                  ? this.state.tree.name + '/' + this.state.selectedFilePath
                   : this.state.tree.name}
               </h2>
               {this.state.selectedFileContents && (
