@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import './SearchResults.css'
-import Loader from '../components/Loader'
+import Loader from '../../components/Loader'
 
 class SearchResults extends Component {
   constructor (props) {

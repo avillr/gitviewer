@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import './Repo.css'
-import Tree from './Tree'
-import RenderedContent from '../components/RenderedContent'
-import Loader from '../components/Loader'
-import { getFileLanguage } from '../utils/filename'
+import {Tree} from '../index.js'
+import RenderedContent from '../../components/RenderedContent'
+import Loader from '../../components/Loader'
+import { getFileLanguage } from '../../utils/filename'
 
 export default class Repo extends Component {
   constructor (props) {

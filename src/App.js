@@ -4,8 +4,7 @@ import 'firebase/firestore'
 
 import Routes from './Routes'
 import './App.css'
-import Navbar from './containers/Navbar'
-import Footer from './containers/Footer'
+import { Navbar, Footer } from './containers'
 
 class App extends Component {
   constructor (props) {
@@ -64,9 +63,9 @@ class App extends Component {
       user: this.state.user
     }
     return (
-      <div className="App">
+      <div className='App'>
         <Navbar username={this.state.user.githubUsername} />
-        <div className="Main-container">
+        <div className='Main-container'>
           <Routes childProps={childProps} />
         </div>
         <Footer />

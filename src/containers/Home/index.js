@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import './Home.css'
-import logo from '../assets/gitviewerWhite.svg'
+import logo from '../../assets/gitviewerWhite.svg'
 
 class Home extends Component {
   constructor (props) {

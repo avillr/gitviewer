@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import firebase from 'firebase'
 
 import './Navbar.css'
-import logo from '../assets/gitviewer.png'
+import logo from '../../assets/gitviewer.png'
 
 const provider = new firebase.auth.GithubAuthProvider()
 provider.addScope('repo')

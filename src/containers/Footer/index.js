@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 import './Footer.css'
 
 class Footer extends Component {
-  render() {
+  render () {
     return (
       <footer>
-        <span style={{marginRight: '10px'}}>
+        <span style={{ marginRight: '10px' }}>
           <strong>GitViewer</strong> by{' '}
           <a
             style={{ color: 'white' }}
-            href="https://avill.io/projects/gitviewer"
+            href='https://avill.io/projects/gitviewer'
           >
             Alex Villarreal
           </a>.

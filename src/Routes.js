@@ -3,10 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import AppliedRoute from './components/AppliedRoute'
 
-import Home from './containers/Home'
-import Repo from './containers/Repo'
-import Help from './containers/Help'
-import SearchResults from './containers/SearchResults'
+import { Home, Repo, Help, SearchResults } from './containers'
 
 const Routes = ({ childProps }) => (
   <Switch>
