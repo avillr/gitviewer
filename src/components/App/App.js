@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import 'firebase/firestore'
+import { Route, Switch } from 'react-router-dom'
 
-import Routes from './Routes'
 import './App.css'
-import { Navbar, Footer } from './containers'
+import Navbar from 'Navbar/Navbar'
+import Footer from 'Footer/Footer'
+import Home from 'Home/Home'
+import Repo from 'Repo/Repo'
+import Help from 'Help/Help'
+import SearchResults from 'SearchResults/SearchResults'
+import AppliedRoute from './AppliedRoute'
 
 class App extends Component {
   constructor (props) {
@@ -66,7 +72,20 @@ class App extends Component {
       <div className='App'>
         <Navbar username={this.state.user.githubUsername} />
         <div className='Main-container'>
-          <Routes childProps={childProps} />
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path='/help' component={Help} />
+            <AppliedRoute
+              path='/search'
+              component={SearchResults}
+              props={childProps}
+            />
+            <AppliedRoute
+              path='/:owner/:repo'
+              component={Repo}
+              props={childProps}
+            />
+          </Switch>
         </div>
         <Footer />
       </div>

@@ -1,4 +1,4 @@
-const getFileLanguage = filename => {
+export default function getFileType (filename) {
   const extension = filename.split('.')[1].toLowerCase()
   switch (extension) {
     case 'js':
@@ -65,5 +65,3 @@ const getFileLanguage = filename => {
       return 'javascript'
   }
 }
-
-module.exports = {getFileLanguage}

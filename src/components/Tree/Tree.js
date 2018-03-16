@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Treebeard } from 'react-treebeard'
 
 class Tree extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       cursor: {}
@@ -10,9 +10,10 @@ class Tree extends Component {
     this.onToggle = this.onToggle.bind(this)
   }
 
-  onToggle(node, toggled) {
+  onToggle (node, toggled) {
     if (this.state.cursor) {
-      this.state.cursor.active = false
+      let oldCursor = this.state.cursor
+      oldCursor.active = false
     }
     node.active = true
     if (node.children) {
@@ -22,8 +23,8 @@ class Tree extends Component {
     this.props.handleFileSelect(node)
   }
 
-  render() {
-    return <Treebeard data={this.props.data} onToggle={this.onToggle} />
+  render () {
+    return <Treebeard data={this.props.data || {}} onToggle={this.onToggle} />
   }
 }
 

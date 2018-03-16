@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import './Repo.css'
-import {Tree} from '../index.js'
-import RenderedContent from '../../components/RenderedContent'
-import Loader from '../../components/Loader'
-import { getFileLanguage } from '../../utils/filename'
+import Tree from 'Tree/Tree'
+import RenderedContent from './RenderedContent'
+import Loader from 'UI/Loader'
+import getFileType from './filename'
 
 export default class Repo extends Component {
   constructor (props) {
@@ -63,7 +63,7 @@ export default class Repo extends Component {
 
   async handleFileSelect (node) {
     if (node.type !== 'blob') return
-    const fileLanguage = getFileLanguage(node.name)
+    const fileLanguage = getFileType(node.name)
     let fileContents = await this.getFileContents(node.url)
     if (fileLanguage !== 'image') fileContents = window.atob(fileContents)
     this.setState({
