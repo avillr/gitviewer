@@ -4,27 +4,44 @@ body {
   font-family: sans-serif;
 }
 
-/* html {
+html {
   scrollbar-face-color: #646464;
   scrollbar-base-color: #646464;
   scrollbar-3dlight-color: #646464;
   scrollbar-highlight-color: #646464;
-  scrollbar-track-color: #21262B;
-  scrollbar-arrow-color: #21262B;
+  scrollbar-track-color: #21262b;
+  scrollbar-arrow-color: #21262b;
   scrollbar-shadow-color: #646464;
   scrollbar-dark-shadow-color: #646464;
 }
 
-::-webkit-scrollbar { width: 8px; height: 0px;}
-::-webkit-scrollbar-button {  background-color: #666; }
-::-webkit-scrollbar-track {  background-color: #646464;}
-::-webkit-scrollbar-track-piece { background-color: #21262B;}
-::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px;}
-::-webkit-scrollbar-corner { background-color: #646464;}
-::-webkit-resizer { background-color: #666;} */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+::-webkit-scrollbar-button {
+  background-color: #666;
+}
+::-webkit-scrollbar-track {
+  background-color: rgb(33, 38, 43);
+}
+::-webkit-scrollbar-track-piece {
+  background-color: #21262b;
+}
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: #666;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-corner {
+  background-color: #646464;
+}
+::-webkit-resizer {
+  background-color: #666;
+}
 
 .Resizer {
-  background: #000;
+  background: rgb(34, 37, 43);
   opacity: 0.2;
   z-index: 1;
   -moz-box-sizing: border-box;
@@ -56,9 +73,7 @@ body {
 
 .Resizer.vertical {
   width: 11px;
-  margin: 0 -5px;
-  border-left: 5px solid rgba(255, 255, 255, 0);
-  border-right: 5px solid rgba(255, 255, 255, 0);
+  margin: 0 -9.5px;
   cursor: col-resize;
 }
 

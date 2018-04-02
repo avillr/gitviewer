@@ -1,8 +1,15 @@
 import React from 'react'
+import firebase from 'firebase'
+
+const provider = new firebase.auth.GithubAuthProvider()
+provider.addScope('repo')
+const attemptSignIn = () => {
+  firebase.auth().signInWithRedirect(provider)
+}
 
 const SearchInput = ({ user }) => {
   return (
-    <form onSubmit={this.handleSubmit}>
+    <form style={{ marginBottom: '5px' }} onSubmit={this.handleSubmit}>
       {user.githubToken ? (
         <div className='field has-addons'>
           <div className='control'>
@@ -20,12 +27,9 @@ const SearchInput = ({ user }) => {
       ) : (
         <div className='field'>
           <div className='control'>
-            <input
-              disabled
-              className='input'
-              type='text'
-              placeholder='Sign In to unlock full text search'
-            />
+            <a className='button is-light is-outlined' onClick={attemptSignIn}>
+              Sign in to unlock full search
+            </a>
           </div>
         </div>
       )}

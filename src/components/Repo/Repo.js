@@ -8,6 +8,7 @@ import RenderedContent from './RenderedContent'
 import getFileType from './filename'
 import SearchInput from './SearchInput'
 import LoadingScreen from '../UI/LoadingScreen'
+import Settings from '../UI/Settings'
 import logo from '../../assets/gitviewerWhite.svg'
 
 export default class Repo extends Component {
@@ -83,7 +84,6 @@ export default class Repo extends Component {
       match: { params: { owner, repo } }
     } = this.props
 
-    console.log(evt.target.input.value)
     const config = {
       headers: { Accept: 'application/vnd.github.v3.text-match+json' }
     }
@@ -153,7 +153,8 @@ export default class Repo extends Component {
     if (this.state.loading) return <LoadingScreen owner={owner} repo={repo} />
     return (
       <div className='Repo'>
-        <SplitPane split='vertical' minSize={250}>
+        <Settings />
+        <SplitPane split='vertical' minSize={260}>
           <div className='explorer'>
             <div
               onClick={() => this.props.history.push('/')}
@@ -176,18 +177,12 @@ export default class Repo extends Component {
               </h1>
             </div>
             <SearchInput user={user} />
-            <hr style={{ margin: '1rem 0' }} />
             <Tree
               data={this.state.tree}
               handleFileSelect={this.handleFileSelect}
             />
           </div>
           <div className='fileviewer'>
-            <h2 style={{ color: 'gray' }}>
-              {this.state.selectedFileContents
-                ? this.state.tree.name + '/' + this.state.selectedFilePath
-                : this.state.tree.name}
-            </h2>
             <SplitPane split='vertical' minSize={800}>
               <RenderedContent
                 language={language}
