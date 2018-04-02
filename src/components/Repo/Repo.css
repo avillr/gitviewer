@@ -15,7 +15,6 @@
 }
 .Repo .fileviewer {
   padding: 15px;
-  width: 850px;
   overflow: scroll;
   min-height: 100%;
 }

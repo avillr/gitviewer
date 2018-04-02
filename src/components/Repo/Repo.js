@@ -168,7 +168,12 @@ export default class Repo extends Component {
                 src={logo}
                 style={{ height: '50px', width: '50px', paddingRight: '10px' }}
               />
-              <h1 className='subtitle is-3'>GitViewer</h1>
+              <h1
+                className='subtitle is-3'
+                style={{ color: 'rgba(255, 255, 255, 0.8)' }}
+              >
+                GitViewer
+              </h1>
             </div>
             <SearchInput user={user} />
             <hr style={{ margin: '1rem 0' }} />
@@ -183,10 +188,13 @@ export default class Repo extends Component {
                 ? this.state.tree.name + '/' + this.state.selectedFilePath
                 : this.state.tree.name}
             </h2>
-            <RenderedContent
-              language={language}
-              contents={this.state.selectedFileContents}
-            />
+            <SplitPane split='vertical' minSize={800}>
+              <RenderedContent
+                language={language}
+                contents={this.state.selectedFileContents}
+              />
+              <div />
+            </SplitPane>
           </div>
         </SplitPane>
       </div>

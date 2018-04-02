@@ -134,18 +134,20 @@ export default class RenderedContent extends Component {
               </label>
             </div>
           </div>
-          <SyntaxHighlighter
-            language={language}
-            showLineNumbers={this.state.lineNumbers}
-            style={this.state.currentStyle.style}
-            customStyle={{
-              margin: '0',
-              borderRadius: '0.5em',
-              border: '1px solid whitesmoke'
-            }}
-          >
-            {contents}
-          </SyntaxHighlighter>
+          <div style={{ padding: '20px' }}>
+            <SyntaxHighlighter
+              language={language}
+              showLineNumbers={this.state.lineNumbers}
+              style={this.state.currentStyle.style}
+              customStyle={{
+                margin: '0',
+                borderRadius: '0.5em',
+                border: '1px solid whitesmoke'
+              }}
+            >
+              {contents}
+            </SyntaxHighlighter>
+          </div>
         </div>
       )
     }
