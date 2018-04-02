@@ -75,11 +75,12 @@ export default class RenderedContent extends Component {
   }
 
   handleLineChange (evt) {
-    this.setState({lineNumbers: !this.state.lineNumbers})
+    this.setState({ lineNumbers: !this.state.lineNumbers })
   }
 
   render () {
     let { contents, language } = this.props
+    if (!contents) return null
     if (language === 'markdown') {
       return (
         <div
@@ -124,7 +125,12 @@ export default class RenderedContent extends Component {
             </div>
             <div className='control'>
               <label className='checkbox'>
-                <input name='lineNumbers' type='checkbox' checked={this.state.lineNumbers} onChange={this.handleLineChange} />
+                <input
+                  name='lineNumbers'
+                  type='checkbox'
+                  checked={this.state.lineNumbers}
+                  onChange={this.handleLineChange}
+                />
               </label>
             </div>
           </div>

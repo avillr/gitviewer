@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import SplitPane from 'react-split-pane'
 
 import './Repo.css'
 import Tree from 'Tree/Tree'
 import RenderedContent from './RenderedContent'
-import Loader from 'UI/Loader'
 import getFileType from './filename'
 import SearchInput from './SearchInput'
 import LoadingScreen from '../UI/LoadingScreen'
@@ -153,29 +153,28 @@ export default class Repo extends Component {
     return (
       <div className='Repo'>
         <div className='contents'>
-          <div className='explorer'>
-            <SearchInput user={user} />
-            <hr style={{ margin: '1rem 0' }} />
-            <Tree
-              data={this.state.tree}
-              handleFileSelect={this.handleFileSelect}
-            />
-          </div>
-          <div className='fileviewer'>
-            <h2 style={{ color: 'gray' }}>
-              {this.state.selectedFileContents
-                ? this.state.tree.name + '/' + this.state.selectedFilePath
-                : this.state.tree.name}
-            </h2>
-            {this.state.selectedFileContents && (
+          <SplitPane split='vertical' minSize={300}>
+            <div className='explorer'>
+              <SearchInput user={user} />
+              <hr style={{ margin: '1rem 0' }} />
+              <Tree
+                data={this.state.tree}
+                handleFileSelect={this.handleFileSelect}
+              />
+            </div>
+            <div className='fileviewer'>
+              <h2 style={{ color: 'gray' }}>
+                {this.state.selectedFileContents
+                  ? this.state.tree.name + '/' + this.state.selectedFilePath
+                  : this.state.tree.name}
+              </h2>
               <RenderedContent
                 language={language}
                 contents={this.state.selectedFileContents}
               />
-            )}
-          </div>
+            </div>
+          </SplitPane>
         </div>
-        )}
       </div>
     )
   }
