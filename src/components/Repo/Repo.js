@@ -6,6 +6,8 @@ import Tree from 'Tree/Tree'
 import RenderedContent from './RenderedContent'
 import Loader from 'UI/Loader'
 import getFileType from './filename'
+import SearchInput from './SearchInput'
+import LoadingScreen from '../UI/LoadingScreen'
 
 export default class Repo extends Component {
   constructor (props) {
@@ -131,9 +133,7 @@ export default class Repo extends Component {
             let workingTree = tree
             while (splitpath.length > 1) {
               let name = splitpath.shift()
-              let index = workingTree.children.findIndex(
-                el => el.name === name
-              )
+              let index = workingTree.children.findIndex(el => el.name === name)
               workingTree = workingTree.children[index]
             }
             node.type === 'tree'
@@ -149,70 +149,32 @@ export default class Repo extends Component {
   render () {
     const { user, match: { params: { owner, repo } } } = this.props
     const { language } = this.state
+    if (this.state.loading) return <LoadingScreen owner={owner} repo={repo} />
     return (
       <div className='Repo'>
-        {this.state.loading ? (
-          <section style={{ height: '100%' }} className='hero is-large is-dark'>
-            <div className='hero-body'>
-              <div className='container'>
-                <h1 className='title'>
-                  Loading {owner}'s {repo}...
-                </h1>
-                <Loader />
-              </div>
-            </div>
-          </section>
-        ) : (
-          <div className='contents'>
-            <div className='explorer'>
-              <form onSubmit={this.handleSubmit}>
-                {user.githubToken ? (
-                  <div className='field has-addons'>
-                    <div className='control'>
-                      <input
-                        className='input'
-                        name='input'
-                        type='text'
-                        placeholder='Search this repo'
-                      />
-                    </div>
-                    <div className='control'>
-                      <a className='button is-light is-outlined'>Search</a>
-                    </div>
-                  </div>
-                ) : (
-                  <div className='field'>
-                    <div className='control'>
-                      <input
-                        disabled
-                        className='input'
-                        type='text'
-                        placeholder='Sign In to unlock full text search'
-                      />
-                    </div>
-                  </div>
-                )}
-              </form>
-              <hr style={{ margin: '1rem 0' }} />
-              <Tree
-                data={this.state.tree}
-                handleFileSelect={this.handleFileSelect}
-              />
-            </div>
-            <div className='fileviewer'>
-              <h2 style={{ color: 'gray' }}>
-                {this.state.selectedFileContents
-                  ? this.state.tree.name + '/' + this.state.selectedFilePath
-                  : this.state.tree.name}
-              </h2>
-              {this.state.selectedFileContents && (
-                <RenderedContent
-                  language={language}
-                  contents={this.state.selectedFileContents}
-                />
-              )}
-            </div>
+        <div className='contents'>
+          <div className='explorer'>
+            <SearchInput user={user} />
+            <hr style={{ margin: '1rem 0' }} />
+            <Tree
+              data={this.state.tree}
+              handleFileSelect={this.handleFileSelect}
+            />
           </div>
+          <div className='fileviewer'>
+            <h2 style={{ color: 'gray' }}>
+              {this.state.selectedFileContents
+                ? this.state.tree.name + '/' + this.state.selectedFilePath
+                : this.state.tree.name}
+            </h2>
+            {this.state.selectedFileContents && (
+              <RenderedContent
+                language={language}
+                contents={this.state.selectedFileContents}
+              />
+            )}
+          </div>
+        </div>
         )}
       </div>
     )
