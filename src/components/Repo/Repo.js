@@ -8,6 +8,7 @@ import RenderedContent from './RenderedContent'
 import getFileType from './filename'
 import SearchInput from './SearchInput'
 import LoadingScreen from '../UI/LoadingScreen'
+import logo from '../../assets/gitviewerWhite.svg'
 
 export default class Repo extends Component {
   constructor (props) {
@@ -152,29 +153,42 @@ export default class Repo extends Component {
     if (this.state.loading) return <LoadingScreen owner={owner} repo={repo} />
     return (
       <div className='Repo'>
-        <div className='contents'>
-          <SplitPane split='vertical' minSize={300}>
-            <div className='explorer'>
-              <SearchInput user={user} />
-              <hr style={{ margin: '1rem 0' }} />
-              <Tree
-                data={this.state.tree}
-                handleFileSelect={this.handleFileSelect}
+        <SplitPane split='vertical' minSize={250}>
+          <div className='explorer'>
+            <div
+              onClick={() => this.props.history.push('/')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={logo}
+                style={{ height: '50px', width: '50px', paddingRight: '10px' }}
               />
+              <h1 className='subtitle is-3'>GitViewer</h1>
             </div>
-            <div className='fileviewer'>
-              <h2 style={{ color: 'gray' }}>
-                {this.state.selectedFileContents
-                  ? this.state.tree.name + '/' + this.state.selectedFilePath
-                  : this.state.tree.name}
-              </h2>
-              <RenderedContent
-                language={language}
-                contents={this.state.selectedFileContents}
-              />
-            </div>
-          </SplitPane>
-        </div>
+            <SearchInput user={user} />
+            <hr style={{ margin: '1rem 0' }} />
+            <Tree
+              data={this.state.tree}
+              handleFileSelect={this.handleFileSelect}
+            />
+          </div>
+          <div className='fileviewer'>
+            <h2 style={{ color: 'gray' }}>
+              {this.state.selectedFileContents
+                ? this.state.tree.name + '/' + this.state.selectedFilePath
+                : this.state.tree.name}
+            </h2>
+            <RenderedContent
+              language={language}
+              contents={this.state.selectedFileContents}
+            />
+          </div>
+        </SplitPane>
       </div>
     )
   }

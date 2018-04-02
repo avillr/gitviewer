@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import './SearchResults.css'
+import MainWrapper from 'UI/MainWrapper'
 import Loader from 'UI/Loader'
 
 class SearchResults extends Component {
@@ -36,7 +37,11 @@ class SearchResults extends Component {
       .get(url)
       .then(res => res.data)
       .then(results => {
-        this.setState({ ...results, query: searchString.split('q=')[1], loading: false })
+        this.setState({
+          ...results,
+          query: searchString.split('q=')[1],
+          loading: false
+        })
       })
       .catch(console.error)
   }
@@ -119,4 +124,4 @@ class SearchResults extends Component {
   }
 }
 
-export default SearchResults
+export default MainWrapper(SearchResults)

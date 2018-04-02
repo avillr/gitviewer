@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import './Home.css'
+import Navbar from '../Navbar/Navbar'
+import MainWrapper from '../UI/MainWrapper'
 import logo from '../../assets/gitviewerWhite.svg'
 
 class Home extends Component {
@@ -11,6 +13,7 @@ class Home extends Component {
 
   handleChange (evt) {
     evt.preventDefault()
+    if (evt.target.search.value === '') return
     this.props.history.push('/search?q=' + evt.target.search.value)
   }
 
@@ -58,4 +61,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default MainWrapper(Home)

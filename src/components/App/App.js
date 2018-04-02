@@ -4,8 +4,6 @@ import 'firebase/firestore'
 import { Route, Switch } from 'react-router-dom'
 
 import './App.css'
-import Navbar from 'Navbar/Navbar'
-import Footer from 'Footer/Footer'
 import Home from 'Home/Home'
 import Repo from 'Repo/Repo'
 import Help from 'Help/Help'
@@ -70,24 +68,20 @@ class App extends Component {
     }
     return (
       <div className='App'>
-        <Navbar username={this.state.user.githubUsername} />
-        <div className='Main-container'>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path='/help' component={Help} />
-            <AppliedRoute
-              path='/search'
-              component={SearchResults}
-              props={childProps}
-            />
-            <AppliedRoute
-              path='/:owner/:repo'
-              component={Repo}
-              props={childProps}
-            />
-          </Switch>
-        </div>
-        <Footer />
+        <Switch>
+          <AppliedRoute exact path='/' component={Home} props={childProps} />
+          <AppliedRoute path='/help' component={Help} props={childProps} />
+          <AppliedRoute
+            path='/search'
+            component={SearchResults}
+            props={childProps}
+          />
+          <AppliedRoute
+            path='/:owner/:repo'
+            component={Repo}
+            props={childProps}
+          />
+        </Switch>
       </div>
     )
   }

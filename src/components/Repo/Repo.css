@@ -1,22 +1,30 @@
 .Repo {
-  height: calc(100vh - 76px);
+  min-height: 100vh;
+  background: rgb(34, 37, 43);
 }
 .Repo .contents {
-  height: 100%;
   display: flex;
   background-color: rgb(33, 38, 43);
+  min-height: 100%;
 }
 .Repo .explorer {
   padding: 15px;
   overflow: scroll;
   border-right: 1px solid white;
+  min-height: 100%;
 }
 .Repo .fileviewer {
   padding: 15px;
   width: 850px;
   overflow: scroll;
+  min-height: 100%;
 }
 .Repo .markdown-body {
   padding: 3em;
   background-color: white;
+  min-height: 100%;
+}
+
+.Repo .Pane {
+  overflow: scroll;
 }

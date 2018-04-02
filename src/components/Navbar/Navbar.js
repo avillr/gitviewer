@@ -14,6 +14,7 @@ const attemptSignIn = () => {
 
 class Navbar extends Component {
   render () {
+    const username = this.props.user.githubUsername
     return (
       <nav className='navbar' aria-label='main navigation'>
         <div className='navbar-brand'>
@@ -22,10 +23,10 @@ class Navbar extends Component {
           </Link>
         </div>
         <div className='navbar-end'>
-          {this.props.username ? (
+          {username ? (
             <div className='navbar-item has-dropdown is-hoverable'>
               <Link className='navbar-link' to='/account'>
-                Hey, {this.props.username}
+                Hey, {username}
               </Link>
               <div className='navbar-dropdown is-boxed'>
                 <Link className='navbar-item' to='/help'>

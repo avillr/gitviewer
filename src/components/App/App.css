@@ -1,4 +1,4 @@
-.Main-container {
-  height: calc(100vh - 76px);
-  overflow: scroll;
+.App {
+  height: 100%;
+  width: 100%;
 }
