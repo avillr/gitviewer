@@ -23,6 +23,7 @@ export default class Repo extends Component {
       selectedFileContents: ''
     }
     this.getTree = this.getTree.bind(this)
+    this.parseTree = this.parseTree.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.getLatestCommit = this.getLatestCommit.bind(this)
     this.getFileContents = this.getFileContents.bind(this)
@@ -57,12 +58,62 @@ export default class Repo extends Component {
 
   getFileContents (url) {
     const { user: { githubToken } } = this.props
-
     if (githubToken) url += `?access_token=${githubToken}`
     return axios
       .get(url)
       .then(res => res.data.content)
       .catch(console.error)
+  }
+
+  parseTree (commitTree) {
+    // Initialize tree structure for repo
+    let tree = {
+      name: this.props.match.params.repo,
+      toggled: 'true',
+      children: []
+    }
+    // first place all folders in right spot
+    commitTree.tree.filter(node => node.type === 'tree').forEach(node => {
+      let splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
+      let newTreeNode = {
+        ...node,
+        name: splitpath[splitpath.length - 1],
+        toggled: false,
+        children: []
+      }
+      if (splitpath.length === 1) {
+        tree.children.push(newTreeNode)
+      } else {
+        let workingTree = tree
+        while (splitpath.length > 1) {
+          let name = splitpath.shift()
+          let index = workingTree.children.findIndex(el => el.name === name)
+          workingTree = workingTree.children[index]
+        }
+        workingTree.children.push(newTreeNode)
+      }
+    })
+    // then place all files in correct folders
+    commitTree.tree.filter(node => node.type === 'blob').forEach(node => {
+      let splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
+      let newFileNode = {
+        ...node,
+        name: splitpath[splitpath.length - 1]
+      }
+      if (splitpath.length === 1) {
+        tree.children.push(newFileNode)
+      } else {
+        let workingTree = tree
+        while (splitpath.length > 1) {
+          let name = splitpath.shift()
+          let index = workingTree.children.findIndex(el => el.name === name)
+          workingTree = workingTree.children[index]
+        }
+        workingTree.children.push(newFileNode)
+      }
+    })
+    // then set final tree in state
+    this.setState({ tree: tree, loading: false })
   }
 
   async handleFileSelect (node) {
@@ -83,7 +134,6 @@ export default class Repo extends Component {
       user: { githubToken },
       match: { params: { owner, repo } }
     } = this.props
-
     const config = {
       headers: { Accept: 'application/vnd.github.v3.text-match+json' }
     }
@@ -102,81 +152,12 @@ export default class Repo extends Component {
   componentDidMount () {
     this.getLatestCommit()
       .then(commit => this.getTree(commit.sha))
-      .then(commitTree => {
-        // Initialize tree structure for repo
-        let tree = {
-          name: this.props.match.params.repo,
-          toggled: 'true',
-          children: []
-        }
-        // Place nodes in right spot on tree
-        commitTree.tree.forEach(node => {
-          var splitpath = node.path.replace(/^\/|\/$/g, '').split('/')
-          // Initialize new node
-          let newNode = {
-            ...node,
-            name: splitpath[splitpath.length - 1]
-          }
-          if (node.type === 'tree') {
-            newNode = {
-              ...newNode,
-              toggled: false,
-              children: []
-            }
-          }
-          // Find right sub folder to push node into
-          if (splitpath.length === 1) {
-            if (node.type === 'tree') {
-              let indexOfLastTree = tree.children
-                .slice()
-                .reverse()
-                .findIndex(child => child.type === 'tree')
-              if (indexOfLastTree === -1) {
-                tree.children.unshift(newNode)
-              } else {
-                tree.children.splice(
-                  tree.children.length - indexOfLastTree,
-                  0,
-                  newNode
-                )
-              }
-            } else {
-              tree.children.push(newNode)
-            }
-          } else {
-            let workingTree = tree
-            while (splitpath.length > 1) {
-              let name = splitpath.shift()
-              let index = workingTree.children.findIndex(el => el.name === name)
-              workingTree = workingTree.children[index]
-            }
-            if (node.type === 'tree') {
-              let indexOfLastWorkingTree = workingTree.children
-                .slice()
-                .reverse()
-                .findIndex(child => child.type === 'tree')
-              if (indexOfLastWorkingTree === -1) {
-                workingTree.children.unshift(newNode)
-              } else {
-                workingTree.children.splice(
-                  workingTree.children.length - indexOfLastWorkingTree,
-                  0,
-                  newNode
-                )
-              }
-            } else {
-              workingTree.children.push(newNode)
-            }
-          }
-        })
-        // Set State with final tree
-        this.setState({ tree: tree, loading: false })
-      })
+      .then(commitTree => this.parseTree(commitTree))
   }
 
   render () {
-    const { user, match: { params: { owner, repo } } } = this.props
     const { language } = this.state
+    const { user, match: { params: { owner, repo } } } = this.props
     if (this.state.loading) return <LoadingScreen owner={owner} repo={repo} />
     return (
       <div className='Repo'>
