@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import './Home.css'
-import Navbar from '../Navbar/Navbar'
 import MainWrapper from '../UI/MainWrapper'
 import logo from '../../assets/gitviewerWhite.svg'
 

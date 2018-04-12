@@ -95,7 +95,6 @@ export default class Repo extends Component {
       .get(url, config)
       .then(res => res.data)
       .then(results => {
-        console.log('Search Results:', results)
         this.setState({ searchResults: results })
       })
   }
@@ -127,9 +126,23 @@ export default class Repo extends Component {
           }
           // Find right sub folder to push node into
           if (splitpath.length === 1) {
-            node.type === 'tree'
-              ? tree.children.unshift(newNode)
-              : tree.children.push(newNode)
+            if (node.type === 'tree') {
+              let indexOfLastTree = tree.children
+                .slice()
+                .reverse()
+                .findIndex(child => child.type === 'tree')
+              if (indexOfLastTree === -1) {
+                tree.children.unshift(newNode)
+              } else {
+                tree.children.splice(
+                  tree.children.length - indexOfLastTree,
+                  0,
+                  newNode
+                )
+              }
+            } else {
+              tree.children.push(newNode)
+            }
           } else {
             let workingTree = tree
             while (splitpath.length > 1) {
@@ -137,9 +150,23 @@ export default class Repo extends Component {
               let index = workingTree.children.findIndex(el => el.name === name)
               workingTree = workingTree.children[index]
             }
-            node.type === 'tree'
-              ? workingTree.children.unshift(newNode)
-              : workingTree.children.push(newNode)
+            if (node.type === 'tree') {
+              let indexOfLastWorkingTree = workingTree.children
+                .slice()
+                .reverse()
+                .findIndex(child => child.type === 'tree')
+              if (indexOfLastWorkingTree === -1) {
+                workingTree.children.unshift(newNode)
+              } else {
+                workingTree.children.splice(
+                  workingTree.children.length - indexOfLastWorkingTree,
+                  0,
+                  newNode
+                )
+              }
+            } else {
+              workingTree.children.push(newNode)
+            }
           }
         })
         // Set State with final tree
@@ -167,6 +194,7 @@ export default class Repo extends Component {
             >
               <img
                 src={logo}
+                alt='gitviewer logo'
                 style={{ height: '50px', width: '50px', paddingRight: '10px' }}
               />
               <h1

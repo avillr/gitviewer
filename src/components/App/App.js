@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import 'firebase/firestore'
-import { Route, Switch } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 
 import './App.css'
 import Home from 'Home/Home'
