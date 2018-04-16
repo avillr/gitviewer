@@ -4,6 +4,7 @@ import 'firebase/firestore'
 import { Switch } from 'react-router-dom'
 
 import './App.css'
+import Tag from 'Tag/Tag'
 import Home from 'Home/Home'
 import Repo from 'Repo/Repo'
 import Help from 'Help/Help'
@@ -82,6 +83,7 @@ class App extends Component {
             props={childProps}
           />
         </Switch>
+        <Tag />
       </div>
     )
   }

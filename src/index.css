@@ -4,7 +4,7 @@ body {
   font-family: sans-serif;
 }
 
-html {
+.Repo {
   scrollbar-face-color: #646464;
   scrollbar-base-color: #646464;
   scrollbar-3dlight-color: #646464;
@@ -15,28 +15,28 @@ html {
   scrollbar-dark-shadow-color: #646464;
 }
 
-::-webkit-scrollbar {
+.Repo ::-webkit-scrollbar {
   width: 8px;
   height: 0px;
 }
-::-webkit-scrollbar-button {
+.Repo ::-webkit-scrollbar-button {
   background-color: #666;
 }
-::-webkit-scrollbar-track {
+.Repo ::-webkit-scrollbar-track {
   background-color: rgb(33, 38, 43);
 }
-::-webkit-scrollbar-track-piece {
+.Repo ::-webkit-scrollbar-track-piece {
   background-color: #21262b;
 }
-::-webkit-scrollbar-thumb {
+.Repo ::-webkit-scrollbar-thumb {
   height: 50px;
   background-color: #666;
   border-radius: 3px;
 }
-::-webkit-scrollbar-corner {
+.Repo ::-webkit-scrollbar-corner {
   background-color: #646464;
 }
-::-webkit-resizer {
+.Repo ::-webkit-resizer {
   background-color: #666;
 }
 

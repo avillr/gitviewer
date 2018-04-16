@@ -6,7 +6,7 @@ class Footer extends Component {
   render () {
     return (
       <footer>
-        <span style={{ marginRight: '10px' }}>
+        {/* <span style={{ marginRight: '10px' }}>
           <strong>GitViewer</strong> by{' '}
           <a
             style={{ color: 'white' }}
@@ -14,7 +14,7 @@ class Footer extends Component {
           >
             Alex Villarreal
           </a>.
-        </span>
+        </span> */}
       </footer>
     )
   }
