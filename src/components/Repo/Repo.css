@@ -9,21 +9,15 @@
 }
 .Repo .explorer {
   padding: 15px;
-  overflow: scroll;
   min-height: 100%;
 }
 .Repo .fileviewer {
-  overflow: scroll;
   min-height: 100%;
 }
 .Repo .markdown-body {
   padding: 3em;
   background-color: white;
   min-height: 90%;
-}
-
-.Repo .Pane {
-  overflow: scroll;
 }
 
 .Settings {

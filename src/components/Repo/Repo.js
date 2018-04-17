@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import SplitPane from 'react-split-pane'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import './Repo.css'
 import Tree from 'Tree/Tree'
@@ -33,7 +34,9 @@ export default class Repo extends Component {
   getLatestCommit () {
     const {
       user: { githubToken },
-      match: { params: { owner, repo } }
+      match: {
+        params: { owner, repo }
+      }
     } = this.props
     let url = `https://api.github.com/repos/${owner}/${repo}/commits/master`
     if (githubToken) url += `?access_token=${githubToken}`
@@ -46,7 +49,9 @@ export default class Repo extends Component {
   getTree (sha) {
     const {
       user: { githubToken },
-      match: { params: { owner, repo } }
+      match: {
+        params: { owner, repo }
+      }
     } = this.props
     let url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${sha}?recursive=1`
     if (githubToken) url += `&access_token=${githubToken}`
@@ -57,7 +62,9 @@ export default class Repo extends Component {
   }
 
   getFileContents (url) {
-    const { user: { githubToken } } = this.props
+    const {
+      user: { githubToken }
+    } = this.props
     if (githubToken) url += `?access_token=${githubToken}`
     return axios
       .get(url)
@@ -132,7 +139,9 @@ export default class Repo extends Component {
     evt.preventDefault()
     const {
       user: { githubToken },
-      match: { params: { owner, repo } }
+      match: {
+        params: { owner, repo }
+      }
     } = this.props
     const config = {
       headers: { Accept: 'application/vnd.github.v3.text-match+json' }
@@ -157,46 +166,59 @@ export default class Repo extends Component {
 
   render () {
     const { language } = this.state
-    const { user, match: { params: { owner, repo } } } = this.props
+    const {
+      user,
+      match: {
+        params: { owner, repo }
+      }
+    } = this.props
     if (this.state.loading) return <LoadingScreen owner={owner} repo={repo} />
     return (
       <div className='Repo'>
         <Settings />
         <SplitPane split='vertical' minSize={260}>
-          <div className='explorer'>
-            <div
-              onClick={() => this.props.history.push('/')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              <img
-                src={logo}
-                alt='gitviewer logo'
-                style={{ height: '50px', width: '50px', paddingRight: '10px' }}
-              />
-              <h1
-                className='subtitle is-3'
-                style={{ color: 'rgba(255, 255, 255, 0.8)' }}
+          <Scrollbars style={{ width: '100%', height: '100%' }}>
+            <div className='explorer'>
+              <div
+                onClick={() => this.props.history.push('/')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '5px',
+                  cursor: 'pointer'
+                }}
               >
-                GitViewer
-              </h1>
-            </div>
-            <SearchInput user={user} />
-            <Tree
-              data={this.state.tree}
-              handleFileSelect={this.handleFileSelect}
-            />
-          </div>
-          <div className='fileviewer'>
-            <SplitPane split='vertical' minSize={800}>
-              <RenderedContent
-                language={language}
-                contents={this.state.selectedFileContents}
+                <img
+                  src={logo}
+                  alt='gitviewer logo'
+                  style={{
+                    height: '50px',
+                    width: '50px',
+                    paddingRight: '10px'
+                  }}
+                />
+                <h1
+                  className='subtitle is-3'
+                  style={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                >
+                  GitViewer
+                </h1>
+              </div>
+              <SearchInput user={user} />
+              <Tree
+                data={this.state.tree}
+                handleFileSelect={this.handleFileSelect}
               />
+            </div>
+          </Scrollbars>
+          <div className='fileviewer'>
+            <SplitPane split='vertical' minSize={900}>
+              <Scrollbars style={{ width: '100%', height: '100%' }}>
+                <RenderedContent
+                  language={language}
+                  contents={this.state.selectedFileContents}
+                />
+              </Scrollbars>
               <div />
             </SplitPane>
           </div>

@@ -2,42 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-}
-
-.Repo {
-  scrollbar-face-color: #646464;
-  scrollbar-base-color: #646464;
-  scrollbar-3dlight-color: #646464;
-  scrollbar-highlight-color: #646464;
-  scrollbar-track-color: #21262b;
-  scrollbar-arrow-color: #21262b;
-  scrollbar-shadow-color: #646464;
-  scrollbar-dark-shadow-color: #646464;
-}
-
-.Repo ::-webkit-scrollbar {
-  width: 8px;
-  height: 0px;
-}
-.Repo ::-webkit-scrollbar-button {
-  background-color: #666;
-}
-.Repo ::-webkit-scrollbar-track {
-  background-color: rgb(33, 38, 43);
-}
-.Repo ::-webkit-scrollbar-track-piece {
-  background-color: #21262b;
-}
-.Repo ::-webkit-scrollbar-thumb {
-  height: 50px;
-  background-color: #666;
-  border-radius: 3px;
-}
-.Repo ::-webkit-scrollbar-corner {
-  background-color: #646464;
-}
-.Repo ::-webkit-resizer {
-  background-color: #666;
+  background: rgb(34, 37, 43);
 }
 
 .Resizer {
