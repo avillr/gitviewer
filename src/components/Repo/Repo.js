@@ -204,7 +204,7 @@ export default class Repo extends Component {
                   GitViewer
                 </h1>
               </div>
-              <SearchInput user={user} />
+              <SearchInput user={user} handleSubmit={this.handleSubmit} />
               <Tree
                 data={this.state.tree}
                 handleFileSelect={this.handleFileSelect}

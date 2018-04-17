@@ -7,9 +7,9 @@ const attemptSignIn = () => {
   firebase.auth().signInWithRedirect(provider)
 }
 
-const SearchInput = ({ user }) => {
+const SearchInput = ({ user, handleSubmit }) => {
   return (
-    <form style={{ marginBottom: '5px' }} onSubmit={this.handleSubmit}>
+    <form style={{ marginBottom: '5px' }} onSubmit={handleSubmit}>
       {user.githubToken ? (
         <div className='field has-addons'>
           <div className='control'>
